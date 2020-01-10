@@ -3,6 +3,8 @@ from slackself.plugins import *
 import slack
 import httpx
 
+print(Prefixes.event + 'Loading Plugins', end='\r')
+
 @slack.RTMClient.run_on(event='message')
 def _heartbeat(**payload):
     return heartbeat(**payload)
@@ -51,8 +53,17 @@ def _listenercmd(**payload):
 def _listenerd(**payload):
     return listenerd(**payload)
 
+@slack.RTMClient.run_on(event='message')
+def _status(**payload):
+    return status(**payload)
+
 slack_token = config['token']
 rtmclient = slack.RTMClient(token=slack_token)
-print(Prefixes.info + 'Bot Running')
-print(Prefixes.info + 'Default Plugins Loaded: heartbeat, xkcd, react, info, shift, subspace, help')
-rtmclient.start()
+print(Prefixes.event + 'Default Plugins Loaded')
+print(Prefixes.event + 'Custom Plugins Loaded (If Any)')
+try:
+    print(Prefixes.event + 'Running Bot...\n')
+    rtmclient.start()
+except KeyboardInterrupt:
+    print(Prefixes.event + 'Shutdown Called')
+    exit(0)
