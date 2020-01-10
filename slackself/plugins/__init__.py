@@ -2,6 +2,8 @@ from slackself import config, client, Prefixes
 from slackself.constants.emojis import emojis
 from slack.errors import SlackApiError
 from terminaltables import AsciiTable
+from howdoi import howdoi
+import json
 import slack
 import httpx
 import time
@@ -37,6 +39,7 @@ def help(**payload):
                     ['react', 'React to last sent message', '~react :emoji:'],
                     ['reactrand', 'React to with random emoji', '~reactrand'],
                     ['reactspam', 'Spam 23 Reactions (Notification Spam)', '~randspam'],
+                    ['howdoi', 'Find code snippets from stack overflow', '~howdoi loop over list python'],
                     ['help', 'Display this message', '~help']
                 ]
                 ttable = AsciiTable(table)
@@ -205,6 +208,40 @@ To See Commands Run: *~help*
                 )
             except SlackApiError:
                 print(Prefixes.error + 'Failed To Send Message!')
+
+def howdoi(**payload):
+    data = payload['data']
+    channel_id = data['channel']
+    user = data.get('user')
+    timestamp = data['ts']
+    if check_user(user):
+        web_client = client
+        rtm_client = payload['rtm_client']
+        text = data.get('text')
+        if text:
+            text_split = text.split(' ')
+            cmd = text_split[0]
+            if cmd == '~howdoi':
+                print(Prefixes.event + 'Ran Command: howdoi')
+                try:
+                    web_client.chat_update(
+                        channel=channel_id,
+                        text="Finding the answer to that...",
+                        ts=timestamp
+                    )
+                except SlackApiError:
+                    print(Prefixes.error + 'Failed To Send Message!')
+                res = httpx.get('https://howdoi.maxbridgland.com/api/search?q=' + '+'.join(text_split[1:]))
+                res = json.loads(res.content)
+                output = res['answer']
+                try:
+                    web_client.chat_update(
+                        channel=channel_id,
+                        text="```{}```".format(output),
+                        ts=timestamp
+                    )
+                except SlackApiError:
+                    print(Prefixes.error + 'Failed To Send Message!')
 
 def heartbeat(**payload):
     data = payload['data']

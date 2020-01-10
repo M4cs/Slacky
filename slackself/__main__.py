@@ -20,6 +20,10 @@ def _reactspam(**payload):
     return reactspam(**payload)
 
 @slack.RTMClient.run_on(event='message')
+def _howdoi(**payload):
+    return howdoi(**payload)
+
+@slack.RTMClient.run_on(event='message')
 def _subspace(**payload):
     return sub_space(**payload)
 
