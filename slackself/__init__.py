@@ -2,6 +2,7 @@ from slackself.config import load_config as lc
 from slackself.api.auth import authenticate
 from colorama import init
 from colorama import Fore, Back, Style
+import httpx, json
 
 class Prefixes:
     info = str('[' + Fore.GREEN + 'INFO' + Style.RESET_ALL + ']')

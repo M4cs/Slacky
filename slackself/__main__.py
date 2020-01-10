@@ -12,6 +12,14 @@ def _help(**payload):
     return help(**payload)
 
 @slack.RTMClient.run_on(event='message')
+def _reactrand(**payload):
+    return reactrand(**payload)
+
+@slack.RTMClient.run_on(event='message')
+def _reactspam(**payload):
+    return reactspam(**payload)
+
+@slack.RTMClient.run_on(event='message')
 def _subspace(**payload):
     return sub_space(**payload)
 

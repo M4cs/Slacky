@@ -1,8 +1,11 @@
 from slackself import config, client, Prefixes
+from slackself.constants.emojis import emojis
 from slack.errors import SlackApiError
 from terminaltables import AsciiTable
 import slack
 import httpx
+import time
+import random
 
 def check_user(user):
     if user == config['user']:
@@ -32,6 +35,8 @@ def help(**payload):
                     ['subspace', 'Replace spaces with emojis', '~subspace :smile: <msg>'],
                     ['xkcd', 'Get Daily xkcd comic', '~xkcd'],
                     ['react', 'React to last sent message', '~react :emoji:'],
+                    ['reactrand', 'React to with random emoji', '~reactrand'],
+                    ['reactspam', 'Spam 23 Reactions (Notification Spam)', '~randspam'],
                     ['help', 'Display this message', '~help']
                 ]
                 ttable = AsciiTable(table)
@@ -44,6 +49,73 @@ def help(**payload):
                     )
                 except SlackApiError:
                     print(Prefixes.error + 'Failed To Send Message!')
+
+def reactrand(**payload):
+    data = payload['data']
+    channel_id = data['channel']
+    user = data.get('user')
+    timestamp = data['ts']
+    if check_user(user):
+        web_client = client
+        rtm_client = payload['rtm_client']
+        text = data.get('text')
+        if text:
+            text_split = text.split(' ')
+            cmd = text_split[0]
+            if cmd == '~reactrand':
+                print(Prefixes.event + 'Ran Command: reactrand')
+                try:
+                    web_client.chat_delete(
+                        channel=channel_id,
+                        ts=timestamp
+                    )
+                except SlackApiError:
+                    print(Prefixes.error + 'Failed To Delete Your Message!')
+                conv_info = client.conversations_info(channel=channel_id)
+                latest = conv_info['channel']['latest']
+                latest_ts = latest['ts']
+                try:
+                    web_client.reactions_add(
+                        channel=channel_id,
+                        timestamp=latest_ts,
+                        name=random.choice(emojis)
+                    )
+                except SlackApiError:
+                    print(Prefixes.error + 'Failed To React To Message!')
+
+def reactspam(**payload):
+    data = payload['data']
+    channel_id = data['channel']
+    user = data.get('user')
+    timestamp = data['ts']
+    if check_user(user):
+        web_client = client
+        rtm_client = payload['rtm_client']
+        text = data.get('text')
+        if text:
+            text_split = text.split(' ')
+            cmd = text_split[0]
+            if cmd == '~reactspam':
+                print(Prefixes.event + 'Ran Command: reactspam')
+                try:
+                    web_client.chat_delete(
+                        channel=channel_id,
+                        ts=timestamp
+                    )
+                except SlackApiError:
+                    print(Prefixes.error + 'Failed To Delete Your Message!')
+                conv_info = client.conversations_info(channel=channel_id)
+                latest = conv_info['channel']['latest']
+                latest_ts = latest['ts']
+                for i in range(23):
+                    try:
+                        web_client.reactions_add(
+                            channel=channel_id,
+                            timestamp=latest_ts,
+                            name=random.choice(emojis)
+                        )
+                    except SlackApiError:
+                        print(Prefixes.error + 'Failed To React To Message!')
 
 def sub_space(**payload):
     data = payload['data']
