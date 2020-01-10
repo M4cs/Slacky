@@ -1,0 +1,19 @@
+2020-01-10 17:24:29,520 DEBUG    Using selector: KqueueSelector
+2020-01-10 17:24:29,521 DEBUG    Retrieving websocket info.
+2020-01-10 17:24:29,734 DEBUG    Received the following response: {'ok': True, 'url': 'wss://cerberus-xxxx.lb.slack-msgs.com/websocket/acdbzMP01a2CsOquBCGelJGgSfAPTJaJ_EQymk5by4I3Gy3vz-SD5Y9H3A7_oGtsdVSoE1YchnGw0w4btOWhj1IIV-05Lkp0GNyepG1uBVM=', 'team': {'id': 'T5HMFFMFW', 'name': 'Reggora', 'domain': 'reggora'}, 'self': {'id': 'UGCELNPEV', 'name': 'max'}}
+2020-01-10 17:24:29,820 DEBUG    The Websocket connection has been opened.
+2020-01-10 17:24:30,405 DEBUG    Running 12 callbacks for event: 'message'
+2020-01-10 17:24:30,405 DEBUG    Running 12 callbacks for event: 'message'
+2020-01-10 17:24:30,406 DEBUG    Running 12 callbacks for event: 'message'
+2020-01-10 17:24:30,406 DEBUG    Running 12 callbacks for event: 'message'
+2020-01-10 17:24:30,406 DEBUG    Running 12 callbacks for event: 'message'
+2020-01-10 17:24:30,407 DEBUG    Running 12 callbacks for event: 'message'
+2020-01-10 17:24:30,407 DEBUG    Running 12 callbacks for event: 'message'
+2020-01-10 17:24:30,407 DEBUG    Running 12 callbacks for event: 'message'
+2020-01-10 17:24:30,408 DEBUG    Running 12 callbacks for event: 'message'
+2020-01-10 17:24:30,408 DEBUG    Running 12 callbacks for event: 'message'
+2020-01-10 17:24:30,408 DEBUG    Running 12 callbacks for event: 'message'
+2020-01-10 17:24:30,409 DEBUG    Running 12 callbacks for event: 'message'
+2020-01-10 17:24:30,409 INFO     max whaf
+2020-01-10 17:25:04,624 DEBUG    The Slack RTMClient is shutting down.
+2020-01-10 17:25:04,624 WARNING  Websocket was closed.

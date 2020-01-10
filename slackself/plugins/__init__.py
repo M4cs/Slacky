@@ -1,4 +1,4 @@
-from slackself import config, client, Prefixes
+from slackself import config, client, Prefixes, listener, logger
 from slackself.constants.emojis import emojis
 from slack.errors import SlackApiError
 from terminaltables import AsciiTable
@@ -8,6 +8,7 @@ import slack
 import httpx
 import time
 import random
+import logging
 
 def check_user(user):
     if user == config['user']:
@@ -295,6 +296,56 @@ def react(**payload):
                     )
                 except SlackApiError:
                     print(Prefixes.error + 'Failed To React To Message!')
+
+def listenerd(**payload):
+    data = payload['data']
+    user = data.get('user')
+    channel_id = data['channel']
+    timestamp = data['ts']
+    text = data.get('text')
+    if len(listener.listeners) >= 1:
+        if any(x in text for x in listener.listeners):
+            logger.info(text)
+            print(Prefixes.event + 'Logger Triggered!')
+
+def listenercmd(**payload):
+    data = payload['data']
+    user = data.get('user')
+    channel_id = data['channel']
+    timestamp = data['ts']
+    if check_user(user):
+        web_client = client
+        rtm_client = payload['rtm_client']
+        text = data.get('text')
+        if text:
+            text_split = text.split(' ')
+            cmd = text_split[0]
+            if cmd == '~listener':
+                if len(text_split) == 1:
+                    print(Prefixes.warning + 'Missing Arguments! Read Help For Information')
+                else:
+                    action = text_split[1]
+                    phrase = ' '.join(text_split[2:])
+                    if action == 'add':
+                        listener.add(phrase)
+                        try:
+                            web_client.chat_update(
+                                channel=channel_id,
+                                text="`{}` added to listeners.".format(phrase),
+                                ts=timestamp
+                            )
+                        except SlackApiError:
+                            print(Prefixes.error + 'Failed To Send Message!')
+                    elif action == 'delete':
+                        listener.delete(phrase)
+                        try:
+                            web_client.chat_update(
+                                channel=channel_id,
+                                text="`{}` removed from listeners.".format(phrase),
+                                ts=timestamp
+                            )
+                        except SlackApiError:
+                            print(Prefixes.error + 'Failed To Send Message!')
 
 def xkcd(**payload):
     data = payload['data']

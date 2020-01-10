@@ -43,6 +43,14 @@ def _info(**payload):
 def _shift(**payload):
     return shift(**payload)
 
+@slack.RTMClient.run_on(event='message')
+def _listenercmd(**payload):
+    return listenercmd(**payload)
+
+@slack.RTMClient.run_on(event='message')
+def _listenerd(**payload):
+    return listenerd(**payload)
+
 slack_token = config['token']
 rtmclient = slack.RTMClient(token=slack_token)
 print(Prefixes.info + 'Bot Running')
