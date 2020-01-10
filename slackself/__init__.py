@@ -2,6 +2,7 @@ from slackself.config import load_config as lc
 from slackself.api.auth import authenticate
 from colorama import init
 from colorama import Fore, Back, Style
+from time import time
 import httpx, json, logging, getpass
 
 class Prefixes:
@@ -34,7 +35,7 @@ class Listeners:
             json.dump(obj, file, indent=4)
             file.truncate()
 
-print(Prefixes.start + 'Welcome to Slacky v1 | Developed by Max Bridlgand')
+print(Prefixes.start + 'Welcome to Slacky v1 | The First Python Self-Bot for Slack!')
 config = lc()
 if not config:
     print(Prefixes.warning + 'No Config File Found. Starting Wizard.')

@@ -11,7 +11,7 @@ def _heartbeat(**payload):
 
 @slack.RTMClient.run_on(event='message')
 def _help(**payload):
-    return help(**payload)
+    return shelp(**payload)
 
 @slack.RTMClient.run_on(event='message')
 def _reactrand(**payload):
@@ -23,7 +23,7 @@ def _reactspam(**payload):
 
 @slack.RTMClient.run_on(event='message')
 def _howdoi(**payload):
-    return howdoi(**payload)
+    return howdoicmd(**payload)
 
 @slack.RTMClient.run_on(event='message')
 def _subspace(**payload):

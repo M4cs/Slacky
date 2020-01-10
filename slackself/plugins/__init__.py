@@ -22,7 +22,6 @@ def status(**payload):
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        rtm_client = payload['rtm_client']
         text = data.get('text')
         if text:
             text_split = text.split(' ')
@@ -57,14 +56,13 @@ def status(**payload):
                         except SlackApiError:
                             print(Prefixes.error + 'Failed To Update Message!')
                     
-def help(**payload):
+def shelp(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        rtm_client = payload['rtm_client']
         text = data.get('text')
         if text:
             text_split = text.split(' ')
@@ -76,7 +74,8 @@ def help(**payload):
                     ['heartbeat', 'Check if bot is up or not', '~heartbeat'],
                     ['info', 'Get info about the bot', '~info'],
                     ['shift', 'CrEaTe ShIfT tExT lIkE tHiS', '~shift <phrase>'],
-                    ['subspace', 'Replace spaces with emojis', '~subspace :smile: <msg>'],
+                    ['subspace', 'Replace spaces with emojis', '~subspace <:emoji:> <msg>'],
+                    ['setstauts', 'Set status of your profile', '~setstatus <:emoji:> <status>'],
                     ['xkcd', 'Get Daily xkcd comic', '~xkcd'],
                     ['react', 'React to last sent message', '~react :emoji:'],
                     ['reactrand', 'React to with random emoji', '~reactrand'],
@@ -104,7 +103,6 @@ def reactrand(**payload):
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        rtm_client = payload['rtm_client']
         text = data.get('text')
         if text:
             text_split = text.split(' ')
@@ -137,7 +135,6 @@ def reactspam(**payload):
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        rtm_client = payload['rtm_client']
         text = data.get('text')
         if text:
             text_split = text.split(' ')
@@ -171,7 +168,6 @@ def sub_space(**payload):
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        rtm_client = payload['rtm_client']
         text = data.get('text')
         if text:
             text_split = text.split(' ')
@@ -197,7 +193,6 @@ def shift(**payload):
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        rtm_client = payload['rtm_client']
         text = data.get('text')
         if text:
             text_split = text.split(' ')
@@ -230,7 +225,6 @@ def info(**payload):
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        rtm_client = payload['rtm_client']
         if '~info' == data.get('text', []):
             print(Prefixes.event + 'Ran Command: info')
             try:
@@ -253,14 +247,13 @@ To See Commands Run: *~help*
             except SlackApiError:
                 print(Prefixes.error + 'Failed To Send Message!')
 
-def howdoi(**payload):
+def howdoicmd(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        rtm_client = payload['rtm_client']
         text = data.get('text')
         if text:
             text_split = text.split(' ')
@@ -275,9 +268,9 @@ def howdoi(**payload):
                     )
                 except SlackApiError:
                     print(Prefixes.error + 'Failed To Send Message!')
-                res = httpx.get('https://howdoi.maxbridgland.com/api/search?q=' + '+'.join(text_split[1:]))
-                res = json.loads(res.content)
-                output = res['answer']
+                parser = howdoi.get_parser()
+                args = vars(parser.parse_args(text_split[1:]))
+                output = howdoi.howdoi(args)
                 try:
                     web_client.chat_update(
                         channel=channel_id,
@@ -294,7 +287,6 @@ def heartbeat(**payload):
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        rtm_client = payload['rtm_client']
         if '~heartbeat' == data.get('text', []):
             print(Prefixes.event + 'Ran Command: heartbeat')
             try:
@@ -313,7 +305,6 @@ def react(**payload):
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        rtm_client = payload['rtm_client']
         text = data.get('text')
         if text:
             text_split = text.split(' ')
@@ -359,7 +350,6 @@ def listenercmd(**payload):
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        rtm_client = payload['rtm_client']
         text = data.get('text')
         if text:
             text_split = text.split(' ')
@@ -412,7 +402,6 @@ def xkcd(**payload):
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        rtm_client = payload['rtm_client']
         text = data.get('text')
         if text:
             text_split = text.split(' ')
