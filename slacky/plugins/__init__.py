@@ -1,5 +1,6 @@
 from slacky import config, client, Prefixes, listener
 from slacky.constants.emojis import emojis
+from slacky.plugins.custom import *
 from slack.errors import SlackApiError
 from terminaltables import AsciiTable
 from howdoi import howdoi

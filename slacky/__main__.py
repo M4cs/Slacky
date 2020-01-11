@@ -69,6 +69,12 @@ def _listenerd(**payload):
 def _status(**payload):
     return status(**payload)
 
+# Load Custom Plugins Here
+@slack.RTMClient.run_on(event='message')
+def _example(**payload):
+    return custom_example(**payload)
+
+
 slack_token = config['token']
 rtmclient = slack.RTMClient(token=slack_token)
 print(Prefixes.event + 'Default Plugins Loaded')
