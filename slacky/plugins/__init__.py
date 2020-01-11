@@ -3,6 +3,7 @@ from slacky.constants.emojis import emojis
 from slack.errors import SlackApiError
 from terminaltables import AsciiTable
 from howdoi import howdoi
+from pyfiglet import Figlet
 import json
 import slack
 import httpx
@@ -14,6 +15,30 @@ def check_user(user):
         return True
     else:
         return False
+    
+def ascii(**payload):
+    data = payload['data']
+    channel_id = data['channel']
+    user = data.get('user')
+    timestamp = data['ts']
+    if check_user(user):
+        web_client = client
+        text = data.get('text')
+        if text:
+            text_split = text.split(' ')
+            cmd = text_split[0]
+            if cmd == '~ascii':
+                rest = ' '.join(text_split[1:])
+                f = Figlet(font='slant')
+                ascii_text = f.renderText(rest)
+                try:
+                    web_client.chat_update(
+                        channel=channel_id,
+                        text="```{}```".format(ascii_text),
+                        ts=timestamp
+                    )
+                except SlackApiError:
+                    print(Prefixes.error + 'Failed To Send Message!')
     
 def status(**payload):
     data = payload['data']

@@ -40,8 +40,9 @@ The bot reads from a config file. This config file will be generated through the
   <center><img src="https://help.workast.com/hc/article_attachments/360042136214/Slack_member_ID.gif" />
 </p>
 
-# Default Commands
+## Default Commands
 
+These will be improved over time
 
 | Command   | Description                            | Usage                         |
 | :--: | :--: | :--: |
