@@ -1,6 +1,10 @@
 # Slacky
 The First Python Selfbot for Slack Workspaces
 
+<p align="center">
+  <center><img src="https://github.com/M4cs/Slacky/blob/master/banner.png"></center>
+</p>
+
 ## What is this?
 
 Slacky was created as way to automate and make Slack more fun to use. It comes with many commands by default and even allows for custom plugins to be built and imported easily.
