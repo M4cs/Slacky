@@ -16,7 +16,7 @@ Slack as far as I can see have no rules against using selfbots so the only peopl
 </p>
 
 <p align="center">
-  <center><h2 align="center">Slack Server</h2><br><img src="https://github.com/M4cs/Slacky/blob/master/example.gif"></center>
+  <center><h2 align="center">Bot Server</h2><br><img src="https://github.com/M4cs/Slacky/blob/master/example.gif"></center>
 </p>
 
 **Plugin Packs:**
