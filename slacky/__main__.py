@@ -1,5 +1,5 @@
-from slackself import config, client, Prefixes
-from slackself.plugins import *
+from slacky import config, client, Prefixes
+from slacky.plugins import *
 import slack
 import httpx
 

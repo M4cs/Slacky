@@ -1,5 +1,5 @@
-from slackself.config import load_config as lc
-from slackself.api.auth import authenticate
+from slacky.config import load_config as lc
+from slacky.api.auth import authenticate
 from colorama import init
 from colorama import Fore, Back, Style
 from time import time
