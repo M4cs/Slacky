@@ -35,7 +35,7 @@ class Listeners:
             json.dump(obj, file, indent=4)
             file.truncate()
 
-print(Prefixes.start + 'Welcome to Slacky v1 | The First Python Self-Bot for Slack!')
+print(Prefixes.start + 'Welcome to Slacky v1.0.1 | The First Python Self-Bot for Slack!')
 print(Prefixes.event + 'Searching for New Updates...')
 with open('version.txt', 'r') as file:
     version = str(file.read())
