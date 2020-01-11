@@ -2,8 +2,8 @@
   <center><img src="https://github.com/M4cs/Slacky/blob/master/banner.png"><br>
 </p>
 
-[![GitHub stars](https://img.shields.io/github/stars/M4cs/Slacky)](https://github.com/M4cs/Slacky/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/M4cs/Slacky)](https://github.com/M4cs/Slacky/network)
+
+[![GitHub stars](https://img.shields.io/github/stars/M4cs/Slacky)](https://github.com/M4cs/Slacky/stargazers) [![GitHub forks](https://img.shields.io/github/forks/M4cs/Slacky)](https://github.com/M4cs/Slacky/network) [![GitHub license](https://img.shields.io/github/license/M4cs/Slacky)](https://github.com/M4cs/Slacky/blob/master/LICENSE) [![Twitter](https://img.shields.io/twitter/url?style=social)](https://twitter.com/intent/tweet?text=I'm+Using+Slacky+by+Max+Bridgland+to+Make+Slack+Better:&url=https%3A%2F%2Fgithub.com%2FM4cs%2FSlacky)
 
 
 The First Python Selfbot for Slack Workspaces :star:
