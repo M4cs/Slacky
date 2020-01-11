@@ -133,6 +133,7 @@ def shelp(**payload):
                     ['shift', 'CrEaTe ShIfT tExT lIkE tHiS', '~shift <phrase>'],
                     ['subspace', 'Replace spaces with emojis', '~subspace <:emoji:> <msg>'],
                     ['setstauts', 'Set status of your profile', '~setstatus <:emoji:> <status>'],
+                    ['setprefix', 'Set prefix for commands (Default ~)', '~setprefix <prefix>'],
                     ['xkcd', 'Get Daily xkcd comic', '~xkcd'],
                     ['react', 'React to last sent message', '~react :emoji:'],
                     ['reactrand', 'React to with random emoji', '~reactrand'],

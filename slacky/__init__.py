@@ -54,8 +54,12 @@ if not config:
     token = input('> ')
     print(Prefixes.start + 'Enter User ID. Google How To Get This.')
     user_id = input('> ')
-    print(Prefixes.start + 'Enter Desired Prefix')
+    print(Prefixes.start + 'Enter Desired Prefix (Default: ~)')
     prefix = input('> ')
+    if prefix == '' or prefix == None:
+        prefix = '~'
+    else:
+        prefix = prefix
     print(Prefixes.info + 'Entered Token:', token)
     print(Prefixes.info + 'Entered User ID:', user_id)
     print(Prefixes.info + 'Entered Prefix:', prefix)
