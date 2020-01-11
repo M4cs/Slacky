@@ -12,7 +12,7 @@ Slacky was created as way to automate and make Slack more fun to use. It comes w
 Slack as far as I can see have no rules against using selfbots so the only people who would probably find this annoying/against policy would be your organizer admistrators.
 
 <p align="center">
-  <center><h2 align="center">Slack Client</h2><br><img src="https://github.com/M4cs/Slacky/blob/master/slacky.gif"></center>
+  <center><h2 align="center">Slack Client</h2><br><p align="center"><img src="https://github.com/M4cs/Slacky/blob/master/slacky.gif"></p></center>
 </p>
 
 <p align="center">
