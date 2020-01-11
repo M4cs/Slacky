@@ -50,7 +50,7 @@ Using Docker (Much Easier Solution IMO)
 # Run once to setup Config
 python3 -m slacky
 # Run again using Docker
-docker-compose up --build
+docker-compose up
 ```
 
 **Configuration Setup:**
