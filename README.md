@@ -64,6 +64,7 @@ These will be improved over time
 | shift     | CrEaTe ShIfT tExT lIkE tHiS            | ~shift phrase               |
 | subspace  | Replace spaces with emojis             | ~subspace :emoji: msg       |
 | xkcd      | Get Daily xkcd comic                   | ~xkcd                         |
+| delete    | Delete X num of your msgs              | ~delete num_of_msgs           |
 | react     | React to last sent message             | ~react :emoji:                |
 | reactrand | React to with random emoji             | ~reactrand                    |
 | reactspam | Spam 23 Reactions (Notification Spam)  | ~randspam                     |
