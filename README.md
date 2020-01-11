@@ -68,10 +68,10 @@ These will be improved over time
 | listener list | List all listener words                | ~listener list                  |
 | help      | Display this message                   | ~help                         |
 
-# Contributing
+## Contributing
 
 Contributions can be done through Pull Requests or by creating a plugin pack.
 
-# License
+## License
 
 I ask that if you fork this do not release as your own. Please credit and mention it's built off this. In fact building a plugin pack rather than a new bot entirely would be best! The license is MIT so I won't stop you but I'm just asking that you respect my wishes :smile:
