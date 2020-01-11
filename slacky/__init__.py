@@ -5,11 +5,6 @@ from colorama import Fore, Back, Style
 from time import time
 import httpx, json, logging, getpass
 
-with open('version.txt', 'r') as file:
-    version = file.read()
-
-res = httpx.get('https://raw.githubusercontent.com/M4cs/Slacky/blob/master/version.txt').content
-
 class Prefixes:
     info = str('[' + Fore.GREEN + Style.BRIGHT + 'INFO' + Style.RESET_ALL + '] ')
     warning = str('[' + Fore.YELLOW + Style.BRIGHT + 'WARNING' + Style.RESET_ALL + '] ')
@@ -41,6 +36,17 @@ class Listeners:
             file.truncate()
 
 print(Prefixes.start + 'Welcome to Slacky v1 | The First Python Self-Bot for Slack!')
+print(Prefixes.event + 'Searching for New Updates...')
+with open('version.txt', 'r') as file:
+    version = str(file.read())
+
+remote_v = httpx.get('https://raw.githubusercontent.com/M4cs/Slacky/master/version.txt')
+rv = remote_v.content.decode('utf-8')
+
+if version != rv:
+    print(Prefixes.warning + 'Newer Version Available! Please re-pull to update.')
+else:
+    print(Prefixes.info + 'Up to Date!')
 config = lc()
 if not config:
     print(Prefixes.warning + 'No Config File Found. Starting Wizard.')
@@ -73,4 +79,5 @@ client = authenticate(config)
 if not client:
     print(Prefixes.error + 'Could Not Authenticate with Slack! Please check your config and token!')
 print(' ' * 65, end='\r')
-print(Prefixes.info + 'Authentication Successful!')
+user = client.users_info(user=config['user'])
+print(Prefixes.info + 'Logged in as {}'.format(user['user']['real_name']))
