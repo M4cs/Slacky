@@ -14,6 +14,8 @@ Slacky was created as way to automate and make Slack more fun to use. It comes w
 
 Slack as far as I can see have no rules against using selfbots so the only people who would probably find this annoying/against policy would be your organizer admistrators.
 
+Discord for Support: https://discord.gg/JjZwJVF
+
 ### This README has a lot of info, it can be a bit messy. For more information on commands, custom plugins, listeners, and more, check out the Wiki [here](https://github.com/M4cs/Slacky/wiki)
 
 <p align="center">
