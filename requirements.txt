@@ -1,4 +1,5 @@
 slackclient
 httpx
 howdoi
-crayons
+colorama
+pyfiglet
