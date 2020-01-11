@@ -28,6 +28,7 @@ def ascii(**payload):
             text_split = text.split(' ')
             cmd = text_split[0]
             if cmd == '~ascii':
+                print(Prefixes.event + 'Ran Command: ascii')
                 rest = ' '.join(text_split[1:])
                 f = Figlet(font='slant')
                 ascii_text = f.renderText(rest)
@@ -52,7 +53,7 @@ def status(**payload):
             text_split = text.split(' ')
             cmd = text_split[0]
             if cmd == '~setstatus':
-                if len(text_split) == 3:
+                if len(text_split) < 3:
                     print(Prefixes.warning + 'Missing Arguments! Read Help For Information')
                 else:
                     print(Prefixes.event + 'Ran Command: setstatus')
@@ -142,17 +143,16 @@ def reactrand(**payload):
                     )
                 except SlackApiError:
                     print(Prefixes.error + 'Failed To Delete Your Message!')
-                conv_info = client.conversations_info(channel=channel_id)
-                latest = conv_info['channel']['latest']
-                latest_ts = latest['ts']
+                conv_info = client.conversations_history(channel=channel_id, count=1)
+                latest_ts = conv_info['messages'][0]['ts']
                 try:
                     web_client.reactions_add(
                         channel=channel_id,
                         timestamp=latest_ts,
                         name=random.choice(emojis)
                     )
-                except SlackApiError:
-                    print(Prefixes.error + 'Failed To React To Message!')
+                except SlackApiError as e:
+                        print(Prefixes.error + e)
 
 def reactspam(**payload):
     data = payload['data']
@@ -172,20 +172,19 @@ def reactspam(**payload):
                         channel=channel_id,
                         ts=timestamp
                     )
-                except SlackApiError:
-                    print(Prefixes.error + 'Failed To Delete Your Message!')
-                conv_info = client.conversations_info(channel=channel_id)
-                latest = conv_info['channel']['latest']
-                latest_ts = latest['ts']
-                for i in range(23):
+                except SlackApiError as e:
+                        print(Prefixes.error + e)
+                conv_info = client.conversations_history(channel=channel_id, count=1)
+                latest_ts = conv_info['messages'][0]['ts']
+                for _ in range(23):
                     try:
                         web_client.reactions_add(
                             channel=channel_id,
                             timestamp=latest_ts,
                             name=random.choice(emojis)
                         )
-                    except SlackApiError:
-                        print(Prefixes.error + 'Failed To React To Message!')
+                    except SlackApiError as e:
+                        print(Prefixes.error + e)
 
 def sub_space(**payload):
     data = payload['data']
@@ -209,8 +208,41 @@ def sub_space(**payload):
                         text=rest,
                         ts=timestamp
                     )
-                except SlackApiError:
-                    print(Prefixes.error + 'Failed To Send Message!')
+                except SlackApiError as e:
+                        print(Prefixes.error + e)
+                        
+def delete(**payload):
+    data = payload['data']
+    channel_id = data['channel']
+    user = data.get('user')
+    timestamp = data['ts']
+    if check_user(user):
+        web_client = client
+        text = data.get('text')
+        if text:
+            text_split = text.split(' ')
+            cmd = text_split[0]
+            if cmd == '~delete':
+                if len(text_split) < 2:
+                    print(Prefixes.warning + 'Missing Arguments! Read Help For Information')
+                else:
+                    print(Prefixes.event + 'Ran Command: delete')
+                    msgs = int(text_split[1])
+                    conv_hist = web_client.conversations_history(channel=channel_id, count=msgs if msgs <= 100 else 100)
+                    msg_ts = []
+                    for i in conv_hist['messages']:
+                        for k, v in i.items():
+                            if k == "user" and v == config['user']:
+                                msg_ts.append(i['ts'])
+                    for ts in msg_ts:
+                        try:
+                            web_client.chat_delete(
+                                channel=channel_id,
+                                ts=ts
+                            )
+                        except SlackApiError as e:
+                            print(Prefixes.error + e)
+                        
 
 def shift(**payload):
     data = payload['data']
@@ -241,8 +273,8 @@ def shift(**payload):
                         text=new_text,
                         ts=timestamp
                     )
-                except SlackApiError:
-                    print(Prefixes.error + 'Failed To Send Message!')
+                except SlackApiError as e:
+                        print(Prefixes.error + e)
 
 def info(**payload):
     data = payload['data']
@@ -270,8 +302,8 @@ To See Commands Run: *~help*
                     }],
                     ts=timestamp
                 )
-            except SlackApiError:
-                print(Prefixes.error + 'Failed To Send Message!')
+            except SlackApiError as e:
+                print(Prefixes.error + e)
 
 def howdoicmd(**payload):
     data = payload['data']
@@ -303,8 +335,8 @@ def howdoicmd(**payload):
                         text="```{}```".format(output),
                         ts=timestamp
                     )
-                except SlackApiError:
-                    print(Prefixes.error + 'Failed To Send Message!')
+                except SlackApiError as e:
+                    print(Prefixes.error + e)
 
 def heartbeat(**payload):
     data = payload['data']
@@ -321,8 +353,8 @@ def heartbeat(**payload):
                     text="I'm Alive!",
                     ts=timestamp
                 )
-            except SlackApiError:
-                print(Prefixes.error + 'Failed To Send Message!')
+            except SlackApiError as e:
+                print(Prefixes.error + e)
 
 def react(**payload):
     data = payload['data']
@@ -341,8 +373,8 @@ def react(**payload):
                         channel=channel_id,
                         ts=timestamp
                     )
-                except SlackApiError:
-                    print(Prefixes.error + 'Failed To Delete Your Message!')
+                except SlackApiError as e:
+                    print(Prefixes.error + e)
                 emoji = text_split[1]
                 print(Prefixes.event + 'Ran Command: react')
                 conv_info = client.conversations_info(channel=channel_id)
@@ -354,8 +386,8 @@ def react(**payload):
                         timestamp=latest_ts,
                         name=emoji
                     )
-                except SlackApiError:
-                    print(Prefixes.error + 'Failed To React To Message!')
+                except SlackApiError as e:
+                    print(Prefixes.error + e)
 
 def listenerd(**payload):
     data = payload['data']
@@ -395,8 +427,8 @@ def listenercmd(**payload):
                                 text="`{}` added to listeners.".format(phrase),
                                 ts=timestamp
                             )
-                        except SlackApiError:
-                            print(Prefixes.error + 'Failed To Send Message!')
+                        except SlackApiError as e:
+                            print(Prefixes.error + e)
                     elif action == 'list':
                         listeners = ""
                         for ear in listener.listeners:
@@ -407,8 +439,8 @@ def listenercmd(**payload):
                                 text="```{}```".format(listeners),
                                 ts=timestamp
                             )
-                        except SlackApiError:
-                            print(Prefixes.error + 'Failed To Send Message!')
+                        except SlackApiError as e:
+                            print(Prefixes.error + e)
                     elif action == 'delete':
                         listener.delete(phrase)
                         print(Prefixes.event + 'Listener Deleted:', phrase)
@@ -418,8 +450,8 @@ def listenercmd(**payload):
                                 text="`{}` removed from listeners.".format(phrase),
                                 ts=timestamp
                             )
-                        except SlackApiError:
-                            print(Prefixes.error + 'Failed To Send Message!')
+                        except SlackApiError as e:
+                            print(Prefixes.error + e)
 
 def xkcd(**payload):
     data = payload['data']
@@ -454,5 +486,5 @@ def xkcd(**payload):
                         ],
                         ts=timestamp
                     )
-                except SlackApiError:
-                    print(Prefixes.error + 'Failed To Send Message!')
+                except SlackApiError as e:
+                    print(Prefixes.error + e)

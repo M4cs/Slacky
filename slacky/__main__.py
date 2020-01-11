@@ -14,6 +14,10 @@ def _help(**payload):
     return shelp(**payload)
 
 @slack.RTMClient.run_on(event='message')
+def _delete(**payload):
+    return delete(**payload)
+
+@slack.RTMClient.run_on(event='message')
 def _ascii(**payload):
     return ascii(**payload)
 
