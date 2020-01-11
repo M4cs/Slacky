@@ -48,7 +48,7 @@ The bot reads from a config file. This config file will be generated through the
 | heartbeat | Check if bot is up or not              | ~heartbeat                    |
 | info      | Get info about the bot                 | ~info                         |
 | shift     | CrEaTe ShIfT tExT lIkE tHiS            | ~shift phrase               |
-| subspace  | Replace spaces with emojis             | ~subspace :smile: msg       |
+| subspace  | Replace spaces with emojis             | ~subspace :emoji: msg       |
 | xkcd      | Get Daily xkcd comic                   | ~xkcd                         |
 | react     | React to last sent message             | ~react :emoji:                |
 | reactrand | React to with random emoji             | ~reactrand                    |
