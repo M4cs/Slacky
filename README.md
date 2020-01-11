@@ -1,15 +1,20 @@
-# Slacky
-The First Python Selfbot for Slack Workspaces
-
 <p align="center">
-  <center><img src="https://github.com/M4cs/Slacky/blob/master/banner.png"></center>
+  <center><img src="https://github.com/M4cs/Slacky/blob/master/banner.png"><br>
 </p>
+
+
+[![GitHub stars](https://img.shields.io/github/stars/M4cs/Slacky)](https://github.com/M4cs/Slacky/stargazers) [![GitHub forks](https://img.shields.io/github/forks/M4cs/Slacky)](https://github.com/M4cs/Slacky/network) [![GitHub license](https://img.shields.io/github/license/M4cs/Slacky)](https://github.com/M4cs/Slacky/blob/master/LICENSE) [![Discord Server](https://img.shields.io/badge/Discord-Join%20For%20Support-blue)](https://discord.gg/JjZwJVF)
+
+
+The First Python Selfbot for Slack Workspaces :star:
 
 ## What is this?
 
 Slacky was created as way to automate and make Slack more fun to use. It comes with many commands by default and even allows for custom plugins to be built and imported easily.
 
 Slack as far as I can see have no rules against using selfbots so the only people who would probably find this annoying/against policy would be your organizer admistrators.
+
+Discord for Support: https://discord.gg/JjZwJVF
 
 ### This README has a lot of info, it can be a bit messy. For more information on commands, custom plugins, listeners, and more, check out the Wiki [here](https://github.com/M4cs/Slacky/wiki)
 
