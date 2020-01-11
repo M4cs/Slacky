@@ -1,0 +1,9 @@
+version: '2'
+services:
+    slacky:
+        build: .
+        image: slacky
+        stdin_open: true
+        tty: true
+        volumes:
+            - ./:/usr/src/slacky

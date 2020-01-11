@@ -4,6 +4,9 @@ from colorama import init
 from colorama import Fore, Back, Style
 from time import time
 import httpx, json, logging, getpass
+import nest_asyncio
+
+nest_asyncio.apply()
 
 class Prefixes:
     info = str('[' + Fore.GREEN + Style.BRIGHT + 'INFO' + Style.RESET_ALL + '] ')
@@ -34,6 +37,12 @@ class Listeners:
             file.seek(0)
             json.dump(obj, file, indent=4)
             file.truncate()
+
+def check_user(user):
+    if user == config['user']:
+        return True
+    else:
+        return False
 
 print(Prefixes.start + 'Welcome to Slacky v1.0.1 | The First Python Self-Bot for Slack!')
 print(Prefixes.event + 'Searching for New Updates...')

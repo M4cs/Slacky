@@ -1,5 +1,5 @@
-from slacky import client, config, Prefixes
-from slack.errors import SlackAPIError
+from slacky import client, config, Prefixes, check_user
+from slack.errors import SlackApiError
 
 def custom_example(**payload):
     # Get Data from Payload
@@ -24,5 +24,5 @@ def custom_example(**payload):
                         ts=timestamp,
                         text="This command is an example custom command."
                     )
-                except SlackAPIError as e:
+                except SlackApiError as e:
                     print(Prefixes.error + str(e))

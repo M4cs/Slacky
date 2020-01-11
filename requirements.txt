@@ -1,5 +1,7 @@
-slackclient
-httpx
-howdoi
 colorama
 pyfiglet
+terminaltables
+howdoi
+httpx
+slackclient
+nest_asyncio

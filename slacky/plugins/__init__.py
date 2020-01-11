@@ -1,4 +1,4 @@
-from slacky import config, client, Prefixes, listener
+from slacky import config, client, Prefixes, listener, check_user
 from slacky.constants.emojis import emojis
 from slacky.plugins.custom import *
 from slack.errors import SlackApiError
@@ -10,12 +10,6 @@ import slack
 import httpx
 import time
 import random
-
-def check_user(user):
-    if user == config['user']:
-        return True
-    else:
-        return False
     
 def ascii(**payload):
     data = payload['data']
