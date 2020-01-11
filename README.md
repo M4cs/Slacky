@@ -1,8 +1,9 @@
 <p align="center">
   <center><img src="https://github.com/M4cs/Slacky/blob/master/banner.png"><br>
-  <a align="center" href="https://github.com/M4cs/Slacky/stargazers"><img src="https://img.shields.io/github/stars/M4cs/Slacky"></a></center>
-  
 </p>
+
+[![GitHub stars](https://img.shields.io/github/stars/M4cs/Slacky)](https://github.com/M4cs/Slacky/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/M4cs/Slacky)](https://github.com/M4cs/Slacky/network)
 
 
 The First Python Selfbot for Slack Workspaces :star:
