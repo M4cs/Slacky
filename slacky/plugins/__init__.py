@@ -108,9 +108,7 @@ def customrsd(**payload):
     text = data.get('text')
     if text:
         if user != config['user']:
-            print('There was text')
             if not config['prefix'] in text:
-                print('Prefix wasnt in text')
                 for custom_reply in customrs.custom_replies:
                     if not custom_reply['is_strict']:
                         print(text.lower())
