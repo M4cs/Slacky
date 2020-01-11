@@ -32,7 +32,9 @@ The bot reads from a config file. This config file will be generated through the
 
 **Get your User ID:** 
 
-![https://help.workast.com/hc/article_attachments/360042136214/Slack_member_ID.gif]
+<p align="center">
+  <center><img src="https://help.workast.com/hc/article_attachments/360042136214/Slack_member_ID.gif" />
+</p>
 
 # Current Commands
 
