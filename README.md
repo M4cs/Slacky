@@ -44,6 +44,8 @@ python3 -m slacky
 
 The bot reads from a config file. This config file will be generated through the wizard if you have not already made one. Below are links for grabbing the information needed for the config:
 
+**Default Prefix (Use ~setprefix or set in config on startup to change):** `~`
+
 **Get your legacy token for the bot:** https://api.slack.com/custom-integrations/legacy-tokens
 
 **Get your User ID:** 
@@ -63,6 +65,7 @@ These will be improved over time
 | ascii     | Generate ASCII art from a phrase       | ~ascii msg |
 | shift     | CrEaTe ShIfT tExT lIkE tHiS            | ~shift phrase               |
 | subspace  | Replace spaces with emojis             | ~subspace :emoji: msg       |
+| setprefix | Sets bot command prefix                | ~setprefix prefix           |s
 | xkcd      | Get Daily xkcd comic                   | ~xkcd                         |
 | delete    | Delete X num of your msgs              | ~delete num_of_msgs           |
 | react     | React to last sent message             | ~react :emoji:                |
