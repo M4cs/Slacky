@@ -54,5 +54,7 @@ The bot reads from a config file. This config file will be generated through the
 | reactrand | React to with random emoji             | ~reactrand                    |
 | reactspam | Spam 23 Reactions (Notification Spam)  | ~randspam                     |
 | howdoi    | Find code snippets from stack overflow | ~howdoi loop over list python |
+| listener      | Add or remove listeners                | ~listener add/delete phrase |
+| listener list | List all listener words                | ~listener list                  |
 | help      | Display this message                   | ~help                         |
 
