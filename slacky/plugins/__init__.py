@@ -107,6 +107,7 @@ def shelp(**payload):
                     ['react', 'React to last sent message', '~react :emoji:'],
                     ['reactrand', 'React to with random emoji', '~reactrand'],
                     ['reactspam', 'Spam 23 Reactions (Notification Spam)', '~randspam'],
+                    ['delete', 'Delete # of msgs', '~delete msg_count']
                     ['howdoi', 'Find code snippets from stack overflow', '~howdoi loop over list python'],
                     ['listener', 'Add or remove listeners', '~listener <add/delete> <phrase>'],
                     ['listener list', 'List all listener words', '~listener list'],
