@@ -5,6 +5,11 @@ from colorama import Fore, Back, Style
 from time import time
 import httpx, json, logging, getpass
 
+with open('version.txt', 'r') as file:
+    version = file.read()
+
+res = httpx.get('https://raw.githubusercontent.com/M4cs/Slacky/blob/master/version.txt').content
+
 class Prefixes:
     info = str('[' + Fore.GREEN + Style.BRIGHT + 'INFO' + Style.RESET_ALL + '] ')
     warning = str('[' + Fore.YELLOW + Style.BRIGHT + 'WARNING' + Style.RESET_ALL + '] ')
@@ -43,14 +48,18 @@ if not config:
     token = input('> ')
     print(Prefixes.start + 'Enter User ID. Google How To Get This.')
     user_id = input('> ')
+    print(Prefixes.start + 'Enter Desired Prefix')
+    prefix = input('> ')
     print(Prefixes.info + 'Entered Token:', token)
     print(Prefixes.info + 'Entered User ID:', user_id)
+    print(Prefixes.info + 'Entered Prefix:', prefix)
     print(Prefixes.start + 'Press ENTER to Confirm Information or Ctrl+C to Quit.')
     getpass.getpass('')
     with open('config.json', 'w+') as file:
         config = {
             'token': token,
             'user': user_id,
+            'prefix': prefix,
             'listeners': []
         }
         json.dump(config, file, indent=4)

@@ -27,7 +27,7 @@ def ascii(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == '~ascii':
+            if cmd == config['prefix'] + 'ascii':
                 print(Prefixes.event + 'Ran Command: ascii')
                 rest = ' '.join(text_split[1:])
                 f = Figlet(font='slant')
@@ -52,7 +52,7 @@ def status(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == '~setstatus':
+            if cmd == config['prefix'] + 'setstatus':
                 if len(text_split) < 3:
                     print(Prefixes.warning + 'Missing Arguments! Read Help For Information')
                 else:
@@ -81,7 +81,37 @@ def status(**payload):
                             )
                         except SlackApiError:
                             print(Prefixes.error + 'Failed To Update Message!')
-                    
+
+def setprefix(**payload):
+    data = payload['data']
+    channel_id = data['channel']
+    user = data.get('user')
+    timestamp = data['ts']
+    if check_user(user):
+        web_client = client
+        text = data.get('text')
+        if text:
+            text_split = text.split(' ')
+            cmd = text_split[0]
+            if cmd == config['prefix'] + 'setprefix':
+                print(Prefixes.event + 'Ran Command: setprefix')
+                prefix = text_split[1]
+                config['prefix'] = prefix
+                with open('config.json', 'r+') as file:
+                    obj = json.load(file)
+                    obj['prefix'] = prefix
+                    file.seek(0)
+                    json.dump(obj, file, indent=4)
+                    file.truncate()
+                try:
+                    web_client.chat_update(
+                        channel=channel_id,
+                        text="Updated Prefix to: `{}`".format(prefix),
+                        ts=timestamp
+                    )
+                except SlackApiError:
+                    print(Prefixes.error + 'Failed To Send Message!')
+
 def shelp(**payload):
     data = payload['data']
     channel_id = data['channel']
@@ -93,7 +123,7 @@ def shelp(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == '~help':
+            if cmd == config['prefix'] + 'help':
                 print(Prefixes.event + 'Ran Command: help')
                 table = [
                     ['Command', 'Description', 'Usage'],
@@ -107,7 +137,7 @@ def shelp(**payload):
                     ['react', 'React to last sent message', '~react :emoji:'],
                     ['reactrand', 'React to with random emoji', '~reactrand'],
                     ['reactspam', 'Spam 23 Reactions (Notification Spam)', '~randspam'],
-                    ['delete', 'Delete # of msgs', '~delete msg_count']
+                    ['delete', 'Delete # of msgs', '~delete msg_count'],
                     ['howdoi', 'Find code snippets from stack overflow', '~howdoi loop over list python'],
                     ['listener', 'Add or remove listeners', '~listener <add/delete> <phrase>'],
                     ['listener list', 'List all listener words', '~listener list'],
@@ -135,7 +165,7 @@ def reactrand(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == '~reactrand':
+            if cmd == config['prefix'] + 'reactrand':
                 print(Prefixes.event + 'Ran Command: reactrand')
                 try:
                     web_client.chat_delete(
@@ -166,7 +196,7 @@ def reactspam(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == '~reactspam':
+            if cmd == config['prefix'] + 'reactspam':
                 print(Prefixes.event + 'Ran Command: reactspam')
                 try:
                     web_client.chat_delete(
@@ -198,7 +228,7 @@ def sub_space(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == '~subspace':
+            if cmd == config['prefix'] + 'subspace':
                 print(Prefixes.event + 'Ran Command: subspace')
                 emoji = text_split[1]
                 rest = ' '.join(text_split[2:])
@@ -223,7 +253,7 @@ def delete(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == '~delete':
+            if cmd == config['prefix'] + 'delete':
                 if len(text_split) < 2:
                     print(Prefixes.warning + 'Missing Arguments! Read Help For Information')
                 else:
@@ -256,7 +286,7 @@ def shift(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == '~shift':
+            if cmd == config['prefix'] + 'shift':
                 print(Prefixes.event + 'Ran Command: shift')
                 rest = ' '.join(text_split[1:])
                 new_text = ""
@@ -317,7 +347,7 @@ def howdoicmd(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == '~howdoi':
+            if cmd == config['prefix'] + 'howdoi':
                 print(Prefixes.event + 'Ran Command: howdoi')
                 try:
                     web_client.chat_update(
@@ -368,7 +398,7 @@ def react(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == '~react':
+            if cmd == config['prefix'] + 'react':
                 try:
                     web_client.chat_delete(
                         channel=channel_id,
@@ -413,7 +443,7 @@ def listenercmd(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == '~listener':
+            if cmd == config['prefix'] + 'listener':
                 if len(text_split) == 1:
                     print(Prefixes.warning + 'Missing Arguments! Read Help For Information')
                 else:
@@ -465,7 +495,7 @@ def xkcd(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == '~xkcd':
+            if cmd == config['prefix'] + 'xkcd':
                 print(Prefixes.event + 'Ran Command: xkcd')
                 res = httpx.get('https://xkcd.com/info.0.json').json()
                 link = res['img']
