@@ -1,4 +1,4 @@
-from slacky import config, client, Prefixes, listener, check_user
+from slacky import config, client, Prefixes, listener, check_user, customrs
 from slacky.constants.emojis import emojis
 from slacky.plugins.custom import *
 from slack.errors import SlackApiError
@@ -10,6 +10,132 @@ import slack
 import httpx
 import time
 import random
+import re
+
+def customrscmd(**payload):
+    query = r'![a-z ]+"(.+)" "(.+)"'
+    data = payload['data']
+    channel_id = data['channel']
+    user = data.get('user')
+    timestamp = data['ts']
+    if check_user(user):
+        web_client = client
+        text = data.get('text')
+        if text:
+            text_split = text.split(' ')
+            cmd = text_split[0]
+            if cmd == config['prefix'] + 'customrs':
+                print(Prefixes.event + 'Ran Command: customrs')
+                if len(text_split) < 2:
+                    try:
+                        web_client.chat_update(
+                            channel=channel_id,
+                            text="Missing Arguments. Check the help menu for more information.",
+                            ts=timestamp
+                        )
+                    except SlackApiError:
+                        print(Prefixes.error + 'Missing Args for Command!')
+                else:
+                    action = text_split[1]
+                    if action == "add":
+                        match = re.search(query, text)
+                        trigger = match.group(1)
+                        reply = match.group(2)
+                        is_strict = text_split[-1]
+                        if is_strict == "strict":
+                            is_strict = True
+                        else:
+                            is_strict = False
+                        custom_r = {
+                            'trigger': trigger,
+                            'reply': reply,
+                            'is_strict': is_strict
+                        }
+                        customrs.add(custom_r)
+                        try:
+                            web_client.chat_update(
+                                channel=channel_id,
+                                text="Added Custom Reply. Trigger is \"{}\" and Reply will be \"{}\".\nStrict: {}".format(trigger, reply, is_strict),
+                                ts=timestamp
+                            )
+                        except SlackApiError:
+                            print(Prefixes.error + 'Failed To Send Message!')
+                    elif action == "delete":
+                        num = text_split[2]
+                        customrs.delete(num)
+                        try:
+                            web_client.chat_update(
+                                channel=channel_id,
+                                text="Deleted Custom Reply.",
+                                ts=timestamp
+                            )
+                        except SlackApiError:
+                            print(Prefixes.error + 'Failed To Send Message!')
+                    elif action == "list":
+                        blocks = []
+                        if len(customrs.custom_replies) > 0:
+                            for custom_reply in customrs.custom_replies:
+                                blocks.append({
+                                    "type": "section",
+                                    "text": {
+                                        "type": "mrkdwn",
+                                        "text": "*Trigger:* {}\n*Reply:* {}\n*Strict:* {}".format(custom_reply['trigger'], custom_reply['reply'], custom_reply['is_strict'])
+                                    }
+                                })
+                            try:
+                                web_client.chat_update(
+                                    channel=channel_id,
+                                    blocks=blocks,
+                                    ts=timestamp
+                                )
+                            except SlackApiError:
+                                print(Prefixes.error + 'Failed To Send Message!')
+                        else:
+                            try:
+                                web_client.chat_update(
+                                    channel=channel_id,
+                                    text="No Custom Replies Set! Add some to your config or use the customrs command.",
+                                    ts=timestamp
+                                )
+                            except SlackApiError:
+                                print(Prefixes.error + 'Failed To Send Message!')
+
+def customrsd(**payload):
+    data = payload['data']
+    channel_id = data['channel']
+    user = data.get('user')
+    timestamp = data['ts']
+    text = data.get('text')
+    if text:
+        if user != config['user']:
+            print('There was text')
+            if not config['prefix'] in text:
+                print('Prefix wasnt in text')
+                for custom_reply in customrs.custom_replies:
+                    if not custom_reply['is_strict']:
+                        print(text.lower())
+                        print(custom_reply['trigger'])
+                        if text.lower() in custom_reply['trigger'].lower():
+                            try:
+                                client.chat_postMessage(
+                                    channel=channel_id,
+                                    text=custom_reply['reply'],
+                                    as_user=True,
+                                    ts=timestamp
+                                )
+                            except SlackApiError:
+                                print(Prefixes.error + 'Failed To Send Message!')
+                    else:
+                        if text.lower() == custom_reply['trigger'].lower():
+                            try:
+                                client.chat_postMessage(
+                                    channel=channel_id,
+                                    text=custom_reply['reply'],
+                                    as_user=True,
+                                    ts=timestamp
+                                )
+                            except SlackApiError:
+                                print(Prefixes.error + 'Failed To Send Message!')
     
 def ascii(**payload):
     data = payload['data']
@@ -124,6 +250,7 @@ def shelp(**payload):
                     ['Command', 'Description', 'Usage'],
                     ['heartbeat', 'Check if bot is up or not', '~heartbeat'],
                     ['info', 'Get info about the bot', '~info'],
+                    ['customrs', 'Set custom replies for messages.', 'Read Wiki'],
                     ['ascii', 'Generate ASCII Art from Text', '~ascii <phrase>'],
                     ['shift', 'CrEaTe ShIfT tExT lIkE tHiS', '~shift <phrase>'],
                     ['subspace', 'Replace spaces with emojis', '~subspace <:emoji:> <msg>'],
@@ -310,7 +437,7 @@ def info(**payload):
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        if '~info' == data.get('text', []):
+        if str(config['prefix'] + 'info') == data.get('text', []):
             print(Prefixes.event + 'Ran Command: info')
             try:
                 web_client.chat_update(
@@ -372,7 +499,7 @@ def heartbeat(**payload):
     timestamp = data['ts']
     if check_user(user):
         web_client = client
-        if '~heartbeat' == data.get('text', []):
+        if str(config['prefix'] + 'heartbeat') == data.get('text', []):
             print(Prefixes.event + 'Ran Command: heartbeat')
             try:
                 web_client.chat_update(
@@ -423,7 +550,7 @@ def listenerd(**payload):
     timestamp = data['ts']
     text = data.get('text')
     if text:
-        if not "~" in text:
+        if not config['prefix'] in text:
             if len(listener.listeners) >= 1:
                 if any(x in text for x in listener.listeners):
                     print(Prefixes.event + 'Listener Triggered! Message:', text, '| Channel ID:', channel_id)

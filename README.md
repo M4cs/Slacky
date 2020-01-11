@@ -67,6 +67,13 @@ The bot reads from a config file. This config file will be generated through the
   <center><img src="https://help.workast.com/hc/article_attachments/360042136214/Slack_member_ID.gif" />
 </p>
 
+## Changelog:
+
+### Update 1.1:
+
+  - Adds Custom Replies. Read the [Wiki](https://github.com/M4cs/Slacky/wiki) to learn how to use them.
+  - Bug fixes
+
 ### Creating Custom Plugins:
 
 Creating custom commands and plugins are easy for Slacky. All plugins are written in Python and you can see an example for yourself in `slacky/plugins/custom/example.py`. To create your own plugin follow these steps:
@@ -132,6 +139,7 @@ These will be improved over time
 | :--: | :--: | :--: |
 | heartbeat | Check if bot is up or not              | ~heartbeat                    |
 | info      | Get info about the bot                 | ~info                         |
+| customrs  | Manage custom replies to messages      | [Read Wiki](https://github.com/M4cs/Slacky/wiki) |
 | ascii     | Generate ASCII art from a phrase       | ~ascii msg |
 | shift     | CrEaTe ShIfT tExT lIkE tHiS            | ~shift phrase               |
 | subspace  | Replace spaces with emojis             | ~subspace :emoji: msg       |

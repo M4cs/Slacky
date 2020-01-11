@@ -15,6 +15,29 @@ class Prefixes:
     error = str('[' + Fore.RED + Style.BRIGHT + 'ERROR' + Style.RESET_ALL + '] ')
     start = str('[' + Fore.LIGHTBLUE_EX + Style.BRIGHT + 'SLACKY' + Style.RESET_ALL + '] ')
 
+class CustomReplies:
+    def __init__(self, config):
+        self.custom_replies = config['custom_replies']
+        self.last_sent = False
+
+    def add(self, custom_reply):
+        self.custom_replies.append(custom_reply)
+        with open('config.json', 'r+') as file:
+            obj = json.load(file)
+            obj['custom_replies'] = self.custom_replies
+            file.seek(0)
+            json.dump(obj, file, indent=4)
+            file.truncate()
+    
+    def delete(self, num):
+        del self.custom_replies[num]
+        with open('config.json', 'r+') as file:
+            obj = json.load(file)
+            obj['custom_replies'] = self.custom_replies
+            file.seek(0)
+            json.dump(obj, file, indent=4)
+            file.truncate()
+
 class Listeners:
     def __init__(self, config):
         self.listeners = config['listeners']
@@ -79,7 +102,8 @@ if not config:
             'token': token,
             'user': user_id,
             'prefix': prefix,
-            'listeners': []
+            'listeners': [],
+            'custom_replies': []
         }
         json.dump(config, file, indent=4)
     print(Prefixes.event + 'Config Saved! Please Restart To Use Slacky')
@@ -88,6 +112,7 @@ if not config:
 print(Prefixes.info + 'Config Loaded')
 print(Prefixes.event + 'Attempting to Authenticate with Slack', end='\r')
 listener = Listeners(config)
+customrs = CustomReplies(config)
 client = authenticate(config)
 if not client:
     print(Prefixes.error + 'Could Not Authenticate with Slack! Please check your config and token!')

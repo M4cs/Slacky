@@ -34,6 +34,14 @@ def _reactspam(**payload):
     return reactspam(**payload)
 
 @slack.RTMClient.run_on(event='message')
+def _customrscmd(**payload):
+    return customrscmd(**payload)
+
+@slack.RTMClient.run_on(event='message')
+def _customrsd(**payload):
+    return customrsd(**payload)
+
+@slack.RTMClient.run_on(event='message')
 def _howdoi(**payload):
     return howdoicmd(**payload)
 
