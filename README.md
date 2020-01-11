@@ -133,7 +133,7 @@ These will be improved over time
 | ascii     | Generate ASCII art from a phrase       | ~ascii msg |
 | shift     | CrEaTe ShIfT tExT lIkE tHiS            | ~shift phrase               |
 | subspace  | Replace spaces with emojis             | ~subspace :emoji: msg       |
-| setprefix | Sets bot command prefix                | ~setprefix prefix           |s
+| setprefix | Sets bot command prefix                | ~setprefix prefix           |
 | xkcd      | Get Daily xkcd comic                   | ~xkcd                         |
 | delete    | Delete X num of your msgs              | ~delete num_of_msgs           |
 | react     | React to last sent message             | ~react :emoji:                |
