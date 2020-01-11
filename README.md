@@ -15,6 +15,10 @@ Slack as far as I can see have no rules against using selfbots so the only peopl
   <center><img src="https://github.com/M4cs/Slacky/blob/master/example.gif"></center>
 </p>
 
+**Plugin Packs:**
+
+While there are non yet, if and when people end up making plugin packs, they will be displayed here. If you make one please make a PR to the README with a link to your plugin pack's repo!
+
 ## Getting Started:
 
 **Requirements:**
@@ -64,3 +68,10 @@ These will be improved over time
 | listener list | List all listener words                | ~listener list                  |
 | help      | Display this message                   | ~help                         |
 
+# Contributing
+
+Contributions can be done through Pull Requests or by creating a plugin pack.
+
+# License
+
+I ask that if you fork this do not release as your own. Please credit and mention it's built off this. In fact building a plugin pack rather than a new bot entirely would be best! The license is MIT so I won't stop you but I'm just asking that you respect my wishes :smile:
