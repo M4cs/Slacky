@@ -40,12 +40,11 @@ The bot reads from a config file. This config file will be generated through the
   <center><img src="https://help.workast.com/hc/article_attachments/360042136214/Slack_member_ID.gif" />
 </p>
 
-# Current Commands
+# Default Commands
 
-```
-+-----------+----------------------------------------+-------------------------------+
+
 | Command   | Description                            | Usage                         |
-+-----------+----------------------------------------+-------------------------------+
+| :--: | :--: | :--: |
 | heartbeat | Check if bot is up or not              | ~heartbeat                    |
 | info      | Get info about the bot                 | ~info                         |
 | shift     | CrEaTe ShIfT tExT lIkE tHiS            | ~shift <phrase>               |
@@ -56,5 +55,4 @@ The bot reads from a config file. This config file will be generated through the
 | reactspam | Spam 23 Reactions (Notification Spam)  | ~randspam                     |
 | howdoi    | Find code snippets from stack overflow | ~howdoi loop over list python |
 | help      | Display this message                   | ~help                         |
-+-----------+----------------------------------------+-------------------------------+
-```
+
