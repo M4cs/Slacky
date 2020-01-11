@@ -77,6 +77,10 @@ The bot reads from a config file. This config file will be generated through the
 
 ## Changelog:
 
+### Update 1.1.2:
+
+  - Clean Up Code a Bit
+
 ### Update 1.1.1:
 
   - Adds Custom Config Creation/Selection Argument
