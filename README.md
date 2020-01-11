@@ -1,8 +1,6 @@
 <p align="center">
   <center><img src="https://github.com/M4cs/Slacky/blob/master/banner.png"></center>
-  <br><img src="https://img.shields.io/github/stars/M4cs/Slacky">
-  <br><img src="https://img.shields.io/github/issues/M4cs/Slacky">
-  <br><img src="	https://img.shields.io/github/liscense/M4cs/Slacky">
+  <br><center><a align="center"><img src="https://img.shields.io/github/stars/M4cs/Slacky"><img src="https://img.shields.io/github/issues/M4cs/Slacky> <img src="https://img.shields.io/github/license/M4cs/Slacky"></a>
 </p>
 
 
