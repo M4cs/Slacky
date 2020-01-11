@@ -33,11 +33,22 @@ While there are non yet, if and when people end up making plugin packs, they wil
 
 **Installing:**
 
+From Source
+
 ```
 git clone https://github.com/M4cs/Slacky
 cd Slacky/
 pip3 install -r requirements.txt
 python3 -m slacky
+```
+
+Using Docker (Much Easier Solution IMO)
+
+```
+# Run once to setup Config
+python3 -m slacky
+# Run again using Docker
+docker-compose up --build
 ```
 
 **Configuration Setup:**
