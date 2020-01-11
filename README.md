@@ -42,9 +42,12 @@ git clone https://github.com/M4cs/Slacky
 cd Slacky/
 pip3 install -r requirements.txt
 python3 -m slacky
+
+# From a new/diff config file
+python3 -m slacky --config workspace2.json
 ```
 
-Using Docker (Much Easier Solution IMO)
+Using Docker (Only works with 1 config file)
 
 ```
 # Run once to setup Config
@@ -55,7 +58,7 @@ docker-compose up
 
 **Configuration Setup:**
 
-The bot reads from a config file. This config file will be generated through the wizard if you have not already made one. Below are links for grabbing the information needed for the config:
+The bot reads from a config file. This config file will be generated through the wizard if you have not already made one. If you specify a new filename with the `--config` command that config file will be loaded and if it cannot be found, that config file will be created and you'll go through the wizard again. Below are links for grabbing the information needed for the config:
 
 **Default Prefix (Use ~setprefix or set in config on startup to change):** `~`
 
@@ -68,6 +71,11 @@ The bot reads from a config file. This config file will be generated through the
 </p>
 
 ## Changelog:
+
+### Update 1.1.1:
+
+  - Adds Custom Config Creation/Selection Argument
+  - Error Handling Updates for Ctrl+C on Config Wizard
 
 ### Update 1.1:
 
