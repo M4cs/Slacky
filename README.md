@@ -1,9 +1,12 @@
-# Slacky
-The First Python Selfbot for Slack Workspaces
-
 <p align="center">
   <center><img src="https://github.com/M4cs/Slacky/blob/master/banner.png"></center>
+  <br><img src="https://img.shields.io/github/stars/M4cs/Slacky">
+  <br><img src="https://img.shields.io/github/issues/M4cs/Slacky">
+  <br><img src="	https://img.shields.io/github/liscense/M4cs/Slacky">
 </p>
+
+
+The First Python Selfbot for Slack Workspaces :star:
 
 ## What is this?
 
