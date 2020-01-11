@@ -98,6 +98,7 @@ def shelp(**payload):
                     ['Command', 'Description', 'Usage'],
                     ['heartbeat', 'Check if bot is up or not', '~heartbeat'],
                     ['info', 'Get info about the bot', '~info'],
+                    ['ascii', 'Generate ASCII Art from Text', '~ascii <phrase>'],
                     ['shift', 'CrEaTe ShIfT tExT lIkE tHiS', '~shift <phrase>'],
                     ['subspace', 'Replace spaces with emojis', '~subspace <:emoji:> <msg>'],
                     ['setstauts', 'Set status of your profile', '~setstatus <:emoji:> <status>'],

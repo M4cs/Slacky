@@ -48,6 +48,7 @@ These will be improved over time
 | :--: | :--: | :--: |
 | heartbeat | Check if bot is up or not              | ~heartbeat                    |
 | info      | Get info about the bot                 | ~info                         |
+| ascii     | Generate ASCII art from a phrase       | ~ascii msg |
 | shift     | CrEaTe ShIfT tExT lIkE tHiS            | ~shift phrase               |
 | subspace  | Replace spaces with emojis             | ~subspace :emoji: msg       |
 | xkcd      | Get Daily xkcd comic                   | ~xkcd                         |
