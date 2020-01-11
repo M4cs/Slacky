@@ -77,7 +77,6 @@ try:
     parser = config_parser()
     args = parser.parse_args()
     if args.config:
-        print('THere was')
         config_path = args.config
     else:
         config_path = './config.json'
@@ -111,7 +110,7 @@ try:
         print(Prefixes.info + 'Entered Prefix:', prefix)
         print(Prefixes.start + 'Press ENTER to Confirm Information or Ctrl+C to Quit.')
         getpass.getpass('')
-        with open('config.json', 'w+') as file:
+        with open(config_path, 'w+') as file:
             config = {
                 'token': token,
                 'user': user_id,
