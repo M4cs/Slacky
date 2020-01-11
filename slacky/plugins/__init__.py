@@ -33,7 +33,7 @@ def customrscmd(**payload):
                             text="Missing Arguments. Check the help menu for more information.",
                             ts=timestamp
                         )
-                    except SlackApiError:
+                    except SlackApiError as e:
                         print(Prefixes.error + 'Missing Args for Command!')
                 else:
                     action = text_split[1]
@@ -58,8 +58,8 @@ def customrscmd(**payload):
                                 text="Added Custom Reply. Trigger is \"{}\" and Reply will be \"{}\".\nStrict: {}".format(trigger, reply, is_strict),
                                 ts=timestamp
                             )
-                        except SlackApiError:
-                            print(Prefixes.error + 'Failed To Send Message!')
+                        except SlackApiError as e:
+                            print(Prefixes.error + str(e))
                     elif action == "delete":
                         num = text_split[2]
                         customrs.delete(num)
@@ -69,8 +69,8 @@ def customrscmd(**payload):
                                 text="Deleted Custom Reply.",
                                 ts=timestamp
                             )
-                        except SlackApiError:
-                            print(Prefixes.error + 'Failed To Send Message!')
+                        except SlackApiError as e:
+                            print(Prefixes.error + str(e))
                     elif action == "list":
                         blocks = []
                         if len(customrs.custom_replies) > 0:
@@ -79,7 +79,7 @@ def customrscmd(**payload):
                                     "type": "section",
                                     "text": {
                                         "type": "mrkdwn",
-                                        "text": "*Trigger:* {}\n*Reply:* {}\n*Strict:* {}".format(custom_reply['trigger'], custom_reply['reply'], custom_reply['is_strict'])
+                                        "text": "*#*: {}\n*Trigger:* {}\n*Reply:* {}\n*Strict:* {}".format(customrs.custom_replies.index(custom_reply), custom_reply['trigger'], custom_reply['reply'], custom_reply['is_strict'])
                                     }
                                 })
                             try:
@@ -88,8 +88,8 @@ def customrscmd(**payload):
                                     blocks=blocks,
                                     ts=timestamp
                                 )
-                            except SlackApiError:
-                                print(Prefixes.error + 'Failed To Send Message!')
+                            except SlackApiError as e:
+                                print(Prefixes.error + str(e))
                         else:
                             try:
                                 web_client.chat_update(
@@ -97,8 +97,8 @@ def customrscmd(**payload):
                                     text="No Custom Replies Set! Add some to your config or use the customrs command.",
                                     ts=timestamp
                                 )
-                            except SlackApiError:
-                                print(Prefixes.error + 'Failed To Send Message!')
+                            except SlackApiError as e:
+                                print(Prefixes.error + str(e))
 
 def customrsd(**payload):
     data = payload['data']
@@ -123,8 +123,8 @@ def customrsd(**payload):
                                     as_user=True,
                                     ts=timestamp
                                 )
-                            except SlackApiError:
-                                print(Prefixes.error + 'Failed To Send Message!')
+                            except SlackApiError as e:
+                                print(Prefixes.error + str(e))
                     else:
                         if text.lower() == custom_reply['trigger'].lower():
                             try:
@@ -134,8 +134,8 @@ def customrsd(**payload):
                                     as_user=True,
                                     ts=timestamp
                                 )
-                            except SlackApiError:
-                                print(Prefixes.error + 'Failed To Send Message!')
+                            except SlackApiError as e:
+                                print(Prefixes.error + str(e))
     
 def ascii(**payload):
     data = payload['data']
@@ -159,8 +159,8 @@ def ascii(**payload):
                         text="```{}```".format(ascii_text),
                         ts=timestamp
                     )
-                except SlackApiError:
-                    print(Prefixes.error + 'Failed To Send Message!')
+                except SlackApiError as e:
+                    print(Prefixes.error + str(e))
     
 def status(**payload):
     data = payload['data']
@@ -192,7 +192,7 @@ def status(**payload):
                                 text="Set Status Successfully!",
                                 ts=timestamp
                         )
-                    except SlackApiError:
+                    except SlackApiError as e:
                         print(Prefixes.error + 'Unable To Set Status!')
                         try:
                             web_client.chat_update(
@@ -200,7 +200,7 @@ def status(**payload):
                                 text="Failed to set status.",
                                 ts=timestamp
                             )
-                        except SlackApiError:
+                        except SlackApiError as e:
                             print(Prefixes.error + 'Failed To Update Message!')
 
 def setprefix(**payload):
@@ -230,8 +230,8 @@ def setprefix(**payload):
                         text="Updated Prefix to: `{}`".format(prefix),
                         ts=timestamp
                     )
-                except SlackApiError:
-                    print(Prefixes.error + 'Failed To Send Message!')
+                except SlackApiError as e:
+                    print(Prefixes.error + str(e))
 
 def shelp(**payload):
     data = payload['data']
@@ -274,8 +274,8 @@ def shelp(**payload):
                         text="```{}```".format(str_table),
                         ts=timestamp
                     )
-                except SlackApiError:
-                    print(Prefixes.error + 'Failed To Send Message!')
+                except SlackApiError as e:
+                    print(Prefixes.error + str(e))
 
 def reactrand(**payload):
     data = payload['data']
@@ -295,7 +295,7 @@ def reactrand(**payload):
                         channel=channel_id,
                         ts=timestamp
                     )
-                except SlackApiError:
+                except SlackApiError as e:
                     print(Prefixes.error + 'Failed To Delete Your Message!')
                 conv_info = client.conversations_history(channel=channel_id, count=1)
                 latest_ts = conv_info['messages'][0]['ts']
@@ -478,8 +478,8 @@ def howdoicmd(**payload):
                         text="Finding the answer to that...",
                         ts=timestamp
                     )
-                except SlackApiError:
-                    print(Prefixes.error + 'Failed To Send Message!')
+                except SlackApiError as e:
+                    print(Prefixes.error + str(e))
                 parser = howdoi.get_parser()
                 args = vars(parser.parse_args(text_split[1:]))
                 output = howdoi.howdoi(args)

@@ -30,7 +30,7 @@ class CustomReplies:
             file.truncate()
     
     def delete(self, num):
-        del self.custom_replies[num]
+        del self.custom_replies[int(num)]
         with open('config.json', 'r+') as file:
             obj = json.load(file)
             obj['custom_replies'] = self.custom_replies
