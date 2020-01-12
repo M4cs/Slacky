@@ -3,7 +3,7 @@
 </p>
 
 
-[![GitHub stars](https://img.shields.io/github/stars/M4cs/Slacky)](https://github.com/M4cs/Slacky/stargazers) [![GitHub forks](https://img.shields.io/github/forks/M4cs/Slacky)](https://github.com/M4cs/Slacky/network) [![GitHub license](https://img.shields.io/github/license/M4cs/Slacky)](https://github.com/M4cs/Slacky/blob/master/LICENSE) [![Discord Server](https://img.shields.io/badge/Discord-Join%20For%20Support-blue)](https://discord.gg/JjZwJVF)
+[![GitHub stars](https://img.shields.io/github/stars/M4cs/Slacky)](https://github.com/M4cs/Slacky/stargazers) [![GitHub forks](https://img.shields.io/github/forks/M4cs/Slacky)](https://github.com/M4cs/Slacky/network) [![GitHub license](https://img.shields.io/github/license/M4cs/Slacky)](https://github.com/M4cs/Slacky/blob/master/LICENSE) [![Discord Server](https://img.shields.io/badge/Discord-Join%20For%20Support-blue)](https://discord.gg/JjZwJVF) [![Run on Repl.it](https://repl.it/badge/github/M4cs/Slacky)](https://repl.it/github/M4cs/Slacky)
 
 
 The First Python Selfbot for Slack Workspaces :star:
