@@ -30,7 +30,7 @@ def customrscmd(**payload):
                     try:
                         web_client.chat_update(
                             channel=channel_id,
-                            text="Missing Arguments. Check the help menu for more information.",
+                            text="Missing Arguments. Check the wiki for more information.",
                             ts=timestamp
                         )
                     except SlackApiError as e:
@@ -38,39 +38,59 @@ def customrscmd(**payload):
                 else:
                     action = text_split[1]
                     if action == "add":
-                        match = re.search(query, text)
-                        trigger = match.group(1)
-                        reply = match.group(2)
-                        is_strict = text_split[-1]
-                        if is_strict == "strict":
-                            is_strict = True
+                        if len(text_split) < 4:
+                            try:
+                                web_client.chat_update(
+                                    channel=channel_id,
+                                    text="Missing Arguments. Check the wiki for more information.",
+                                    ts=timestamp
+                                )
+                            except SlackApiError as e:
+                                print(Prefixes.error + 'Missing Args for Command!')
                         else:
-                            is_strict = False
-                        custom_r = {
-                            'trigger': trigger,
-                            'reply': reply,
-                            'is_strict': is_strict
-                        }
-                        customrs.add(custom_r)
-                        try:
-                            web_client.chat_update(
-                                channel=channel_id,
-                                text="Added Custom Reply. Trigger is \"{}\" and Reply will be \"{}\".\nStrict: {}".format(trigger, reply, is_strict),
-                                ts=timestamp
-                            )
-                        except SlackApiError as e:
-                            print(Prefixes.error + str(e))
-                    elif action == "delete":
-                        num = text_split[2]
-                        customrs.delete(num)
-                        try:
-                            web_client.chat_update(
-                                channel=channel_id,
-                                text="Deleted Custom Reply.",
-                                ts=timestamp
-                            )
-                        except SlackApiError as e:
-                            print(Prefixes.error + str(e))
+                            match = re.search(query, text)
+                            trigger = match.group(1)
+                            reply = match.group(2)
+                            is_strict = text_split[-1]
+                            if is_strict == "strict":
+                                is_strict = True
+                            else:
+                                is_strict = False
+                            custom_r = {
+                                'trigger': trigger,
+                                'reply': reply,
+                                'is_strict': is_strict
+                            }
+                            customrs.add(custom_r)
+                            try:
+                                web_client.chat_update(
+                                    channel=channel_id,
+                                    text="Added Custom Reply. Trigger is \"{}\" and Reply will be \"{}\".\nStrict: {}".format(trigger, reply, is_strict),
+                                    ts=timestamp
+                                )
+                            except SlackApiError as e:
+                                print(Prefixes.error + str(e))
+                        elif action == "delete":
+                            if len(text_split) < 3:
+                                try:
+                                    web_client.chat_update(
+                                        channel=channel_id,
+                                        text="Missing Arguments. Check the wiki for more information.",
+                                        ts=timestamp
+                                    )
+                                except SlackApiError as e:
+                                    print(Prefixes.error + 'Missing Args for Command!')
+                        else:
+                            num = text_split[2]
+                            customrs.delete(num)
+                            try:
+                                web_client.chat_update(
+                                    channel=channel_id,
+                                    text="Deleted Custom Reply.",
+                                    ts=timestamp
+                                )
+                            except SlackApiError as e:
+                                print(Prefixes.error + str(e))
                     elif action == "list":
                         blocks = []
                         if len(customrs.custom_replies) > 0:
@@ -111,8 +131,6 @@ def customrsd(**payload):
             if not config['prefix'] in text:
                 for custom_reply in customrs.custom_replies:
                     if not custom_reply['is_strict']:
-                        print(text.lower())
-                        print(custom_reply['trigger'])
                         if text.lower() in custom_reply['trigger'].lower():
                             try:
                                 client.chat_postMessage(
@@ -148,17 +166,27 @@ def ascii(**payload):
             cmd = text_split[0]
             if cmd == config['prefix'] + 'ascii':
                 print(Prefixes.event + 'Ran Command: ascii')
-                rest = ' '.join(text_split[1:])
-                f = Figlet(font='slant')
-                ascii_text = f.renderText(rest)
-                try:
-                    web_client.chat_update(
-                        channel=channel_id,
-                        text="```{}```".format(ascii_text),
-                        ts=timestamp
-                    )
-                except SlackApiError as e:
-                    print(Prefixes.error + str(e))
+                if len(text_split) < 2:
+                    try:
+                        web_client.chat_update(
+                            channel=channel_id,
+                            text="You need to feed a string to asciify!",
+                            ts=timestamp
+                        )
+                    except SlackApiError as e:
+                        print(Prefixes.error + 'Missing Args for Command!')
+                else:
+                    rest = ' '.join(text_split[1:])
+                    f = Figlet(font='slant')
+                    ascii_text = f.renderText(rest)
+                    try:
+                        web_client.chat_update(
+                            channel=channel_id,
+                            text="```{}```".format(ascii_text),
+                            ts=timestamp
+                        )
+                    except SlackApiError as e:
+                        print(Prefixes.error + str(e))
     
 def status(**payload):
     data = payload['data']
@@ -214,22 +242,32 @@ def setprefix(**payload):
             cmd = text_split[0]
             if cmd == config['prefix'] + 'setprefix':
                 print(Prefixes.event + 'Ran Command: setprefix')
-                prefix = text_split[1]
-                config['prefix'] = prefix
-                with open('config.json', 'r+') as file:
-                    obj = json.load(file)
-                    obj['prefix'] = prefix
-                    file.seek(0)
-                    json.dump(obj, file, indent=4)
-                    file.truncate()
-                try:
-                    web_client.chat_update(
-                        channel=channel_id,
-                        text="Updated Prefix to: `{}`".format(prefix),
-                        ts=timestamp
-                    )
-                except SlackApiError as e:
-                    print(Prefixes.error + str(e))
+                if len(text_split) != 2:
+                    try:
+                        web_client.chat_update(
+                            channel=channel_id,
+                            text="Please only feed one argument for your prefix. You can repeat special chars to act as a longer prefix.",
+                            ts=timestamp
+                        )
+                    except SlackApiError as e:
+                        print(Prefixes.error + 'Please only feed one argument for your prefix. You can repeat special chars to act as a longer prefix.')
+                else:
+                    prefix = text_split[1]
+                    config['prefix'] = prefix
+                    with open('config.json', 'r+') as file:
+                        obj = json.load(file)
+                        obj['prefix'] = prefix
+                        file.seek(0)
+                        json.dump(obj, file, indent=4)
+                        file.truncate()
+                    try:
+                        web_client.chat_update(
+                            channel=channel_id,
+                            text="Updated Prefix to: `{}`".format(prefix),
+                            ts=timestamp
+                        )
+                    except SlackApiError as e:
+                        print(Prefixes.error + str(e))
 
 def shelp(**payload):
     data = payload['data']
@@ -351,17 +389,24 @@ def sub_space(**payload):
             cmd = text_split[0]
             if cmd == config['prefix'] + 'subspace':
                 print(Prefixes.event + 'Ran Command: subspace')
-                emoji = text_split[1]
-                rest = ' '.join(text_split[2:])
-                rest = rest.replace(' ', ' {} '.format(emoji))
-                try:
-                    web_client.chat_update(
+                if len(text_split) < 3:
+                    web_client.chat_delete(
                         channel=channel_id,
-                        text=rest,
                         ts=timestamp
                     )
-                except SlackApiError as e:
-                        print(Prefixes.error + e)
+                    print(Prefixes.warning + 'Missing Arguments! Read Help For Information')
+                else:
+                    emoji = text_split[1]
+                    rest = ' '.join(text_split[2:])
+                    rest = rest.replace(' ', ' {} '.format(emoji))
+                    try:
+                        web_client.chat_update(
+                            channel=channel_id,
+                            text=rest,
+                            ts=timestamp
+                        )
+                    except SlackApiError as e:
+                            print(Prefixes.error + e)
                         
 def delete(**payload):
     data = payload['data']
@@ -376,6 +421,10 @@ def delete(**payload):
             cmd = text_split[0]
             if cmd == config['prefix'] + 'delete':
                 if len(text_split) < 2:
+                    web_client.chat_delete(
+                        channel=channel_id,
+                        ts=timestamp
+                    )
                     print(Prefixes.warning + 'Missing Arguments! Read Help For Information')
                 else:
                     print(Prefixes.event + 'Ran Command: delete')
@@ -409,24 +458,31 @@ def shift(**payload):
             cmd = text_split[0]
             if cmd == config['prefix'] + 'shift':
                 print(Prefixes.event + 'Ran Command: shift')
-                rest = ' '.join(text_split[1:])
-                new_text = ""
-                count = 0
-                for char in rest:
-                    if count == 0:
-                        new_text += char.upper()
-                        count = 1
-                    else:
-                        new_text += char.lower()
-                        count = 0
-                try:
-                    web_client.chat_update(
+                if len(text_split) < 2:
+                    web_client.chat_delete(
                         channel=channel_id,
-                        text=new_text,
                         ts=timestamp
                     )
-                except SlackApiError as e:
-                        print(Prefixes.error + e)
+                    print(Prefixes.error + 'Missing Arguments! Please read the help menu for more info!')
+                else:
+                    rest = ' '.join(text_split[1:])
+                    new_text = ""
+                    count = 0
+                    for char in rest:
+                        if count == 0:
+                            new_text += char.upper()
+                            count = 1
+                        else:
+                            new_text += char.lower()
+                            count = 0
+                    try:
+                        web_client.chat_update(
+                            channel=channel_id,
+                            text=new_text,
+                            ts=timestamp
+                        )
+                    except SlackApiError as e:
+                            print(Prefixes.error + e)
 
 def info(**payload):
     data = payload['data']
@@ -447,9 +503,10 @@ def info(**payload):
                             "text": """\
 Running :slack: *Slacky* by <https://twitter.com/maxbridgland|Max Bridgland>
 
-To See Commands Run: *~help*
+To See Commands Run: {}help
 
-*Source Code*: <https://github.com/M4cs/Slacky|GitHub>"""
+*Source Code*: <https://github.com/M4cs/Slacky|GitHub>
+*Wiki*: <https://github.com/M4cs/Slacky/wiki|GitHub Wiki>""".format(config['prefix'])
                         }
                     }],
                     ts=timestamp
@@ -470,6 +527,12 @@ def howdoicmd(**payload):
             cmd = text_split[0]
             if cmd == config['prefix'] + 'howdoi':
                 print(Prefixes.event + 'Ran Command: howdoi')
+                if len(text_split) < 2:
+                    web_client.chat_delete(
+                        channel=channel_id,
+                        ts=timestamp
+                    )
+                    print(Prefixes.error + 'Missing Arguments! Please read the help menu for more info!')
                 try:
                     web_client.chat_update(
                         channel=channel_id,
@@ -629,7 +692,7 @@ def xkcd(**payload):
                                 "type": "image",
                                 "title": {
                                     "type": "plain_text",
-                                    "text": "Today's xkcd Comic",
+                                    "text": alt_text,
                                     "emoji": True
                                 },
                                 "image_url": link,
