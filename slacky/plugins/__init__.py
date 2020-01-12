@@ -70,16 +70,16 @@ def customrscmd(**payload):
                                 )
                             except SlackApiError as e:
                                 print(Prefixes.error + str(e))
-                        elif action == "delete":
-                            if len(text_split) < 3:
-                                try:
-                                    web_client.chat_update(
-                                        channel=channel_id,
-                                        text="Missing Arguments. Check the wiki for more information.",
-                                        ts=timestamp
-                                    )
-                                except SlackApiError as e:
-                                    print(Prefixes.error + 'Missing Args for Command!')
+                    elif action == "delete":
+                        if len(text_split) < 3:
+                            try:
+                                web_client.chat_update(
+                                    channel=channel_id,
+                                    text="Missing Arguments. Check the wiki for more information.",
+                                    ts=timestamp
+                                )
+                            except SlackApiError as e:
+                                print(Prefixes.error + 'Missing Args for Command!')
                         else:
                             num = text_split[2]
                             customrs.delete(num)
