@@ -1,4 +1,4 @@
-FROM python:3.6.8
+FROM python:3.7.4
 MAINTAINER Max Bridgland <mabridgland@protonmail.com>
 
 RUN mkdir -p /usr/src/slacky
