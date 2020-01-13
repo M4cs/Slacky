@@ -36,7 +36,6 @@ While there are non yet, if and when people end up making plugin packs, they wil
 - Python 3
 - Slack
 - Internet Connection
-- Server or Herokuapp Knowledge for Always on Bot
 
 **Installing:**
 
