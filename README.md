@@ -76,6 +76,10 @@ The bot reads from a config file. This config file will be generated through the
 
 ## Changelog:
 
+### Update 1.2.2:
+
+  - Fix emoji handling in the `react` command
+
 ### Update 1.2.1:
 
   - Fix `customrs` command

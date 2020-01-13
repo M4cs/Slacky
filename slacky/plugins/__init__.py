@@ -798,7 +798,7 @@ def react(**payload):
                     web_client.reactions_add(
                         channel=channel_id,
                         timestamp=latest_ts,
-                        name=emoji
+                        name=emoji.replace(':', '')
                     )
                 except SlackApiError as e:
                     print(Prefixes.error + str(e))
