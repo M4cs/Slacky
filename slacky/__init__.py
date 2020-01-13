@@ -6,6 +6,7 @@ from time import time
 from argparse import ArgumentParser
 import httpx, json, logging, getpass
 import nest_asyncio
+import datetime
 
 nest_asyncio.apply()
 
@@ -15,6 +16,43 @@ class Prefixes:
     event = str('[' + Fore.BLUE + Style.BRIGHT + 'EVENT' + Style.RESET_ALL + '] ')
     error = str('[' + Fore.RED + Style.BRIGHT + 'ERROR' + Style.RESET_ALL + '] ')
     start = str('[' + Fore.LIGHTBLUE_EX + Style.BRIGHT + 'SLACKY' + Style.RESET_ALL + '] ')
+    
+class BotMetaData:
+    def __init__(self):
+        self.start_time = datetime.datetime.now()
+        self.command_count = 0
+        self.error_count = 0
+        self.warning_count = 0
+        self.message_count = 0
+        
+    def get_uptime(self):
+        now = datetime.datetime.now()
+        uptime = now - self.start_time
+        days = uptime.days
+        hours, remainder = divmod(uptime.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        string = ""
+        if days == 0:
+            pass
+        else:
+            string += str(str(days) + " days, ")
+        if hours == 0:
+            pass
+        else:
+            string += str(str(hours) + " hrs, ")
+        if minutes == 0:
+            pass
+        else:
+            string += str(str(minutes) + " min, ")
+        if seconds == 0:
+            pass
+        else:
+            string += str(str(seconds) + " sec.")
+        if string.endswith(', '):
+            string = string[:-2]
+        else:
+            pass
+        return string
 
 class CustomReplies:
     def __init__(self, config):
@@ -80,10 +118,10 @@ try:
         config_path = args.config
     else:
         config_path = './config.json'
-    print(Prefixes.start + 'Welcome to Slacky v1.1.4 | The First Python Self-Bot for Slack!')
-    print(Prefixes.event + 'Searching for New Updates...')
     with open('version.txt', 'r') as file:
         version = str(file.read())
+    print(Prefixes.start + 'Welcome to Slacky {} | The First Python Self-Bot for Slack!'.format(version))
+    print(Prefixes.event + 'Searching for New Updates...')
 
     remote_v = httpx.get('https://raw.githubusercontent.com/M4cs/Slacky/master/version.txt')
     rv = remote_v.content.decode('utf-8')
@@ -133,6 +171,7 @@ try:
     user = client.users_info(user=config['user'])
     team = client.team_info()['team']['domain']
     print(Prefixes.info + 'Logged in as {}@{}'.format(user['user']['name'], team))
+    bot = BotMetaData()
 except KeyboardInterrupt:
     print(Prefixes.event + 'Shutdown Called')
     exit(0)

@@ -76,6 +76,12 @@ The bot reads from a config file. This config file will be generated through the
 
 ## Changelog:
 
+### Update 1.2:
+
+  - Add `stats, space, ud` commands.
+  - Clean up more error handling
+  - Adds BotMetaData class for bot data like uptime, commands run, errors, etc
+
 ### Update 1.1.4:
 
   - Fix Custom Replies
@@ -166,9 +172,12 @@ These will be improved over time
 | heartbeat | Check if bot is up or not              | ~heartbeat                    |
 | info      | Get info about the bot                 | ~info                         |
 | customrs  | Manage custom replies to messages      | [Read Wiki](https://github.com/M4cs/Slacky/wiki) |
+| stats     | Get info about the bot running         | ~stats                        |
 | ascii     | Generate ASCII art from a phrase       | ~ascii msg |
 | shift     | CrEaTe ShIfT tExT lIkE tHiS            | ~shift phrase               |
 | subspace  | Replace spaces with emojis             | ~subspace :emoji: msg       |
+| space     | Add a space in between each character  | ~space phrase               |
+| ud        | Get urban dictionary definiton         | ~ud query                   |
 | setprefix | Sets bot command prefix                | ~setprefix prefix           |
 | xkcd      | Get Daily xkcd comic                   | ~xkcd                         |
 | delete    | Delete X num of your msgs              | ~delete num_of_msgs           |

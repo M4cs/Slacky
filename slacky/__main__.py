@@ -10,8 +10,20 @@ def _heartbeat(**payload):
     return heartbeat(**payload)
 
 @slack.RTMClient.run_on(event='message')
+def _stats(**payload):
+    return stats(**payload)
+
+@slack.RTMClient.run_on(event='message')
 def _setprefix(**payload):
     return setprefix(**payload)
+
+@slack.RTMClient.run_on(event='message')
+def _space(**payload):
+    return space(**payload)
+
+@slack.RTMClient.run_on(event='message')
+def _ud(**payload):
+    return ud(**payload)
 
 @slack.RTMClient.run_on(event='message')
 def _help(**payload):
