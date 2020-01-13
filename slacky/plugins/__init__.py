@@ -13,112 +13,123 @@ import random
 import re
 
 def customrscmd(**payload):
-    query = r'![a-z ]+"(.+)" "(.+)"'
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
     timestamp = data['ts']
-    if check_user(user):
-        web_client = client
-        text = data.get('text')
-        if text:
-            text_split = text.split(' ')
-            cmd = text_split[0]
-            if cmd == config['prefix'] + 'customrs':
-                print(Prefixes.event + 'Ran Command: customrs')
-                if len(text_split) < 2:
+    # if check_user(user):
+    #     web_client = client
+    #     text = data.get('text')
+    #     if text:
+    #         text_split = text.split(' ')
+    #         cmd = text_split[0]
+    #         if cmd == config['prefix'] + 'customrs':
+    #             print(Prefixes.event + 'Ran Command: customrs')
                     try:
                         web_client.chat_update(
                             channel=channel_id,
-                            text="Missing Arguments. Check the wiki for more information.",
+                            text="Custom Replies are disabled until regex issues are fixed.",
                             ts=timestamp
                         )
                     except SlackApiError as e:
-                        print(Prefixes.error + 'Missing Args for Command!')
-                else:
-                    action = text_split[1]
-                    if action == "add":
-                        if len(text_split) < 4:
-                            try:
-                                web_client.chat_update(
-                                    channel=channel_id,
-                                    text="Missing Arguments. Check the wiki for more information.",
-                                    ts=timestamp
-                                )
-                            except SlackApiError as e:
-                                print(Prefixes.error + 'Missing Args for Command!')
-                        else:
-                            match = re.search(query, text)
-                            trigger = match.group(1)
-                            reply = match.group(2)
-                            is_strict = text_split[-1]
-                            if is_strict == "strict":
-                                is_strict = True
-                            else:
-                                is_strict = False
-                            custom_r = {
-                                'trigger': trigger,
-                                'reply': reply,
-                                'is_strict': is_strict
-                            }
-                            customrs.add(custom_r)
-                            try:
-                                web_client.chat_update(
-                                    channel=channel_id,
-                                    text="Added Custom Reply. Trigger is \"{}\" and Reply will be \"{}\".\nStrict: {}".format(trigger, reply, is_strict),
-                                    ts=timestamp
-                                )
-                            except SlackApiError as e:
-                                print(Prefixes.error + str(e))
-                    elif action == "delete":
-                        if len(text_split) < 3:
-                            try:
-                                web_client.chat_update(
-                                    channel=channel_id,
-                                    text="Missing Arguments. Check the wiki for more information.",
-                                    ts=timestamp
-                                )
-                            except SlackApiError as e:
-                                print(Prefixes.error + 'Missing Args for Command!')
-                        else:
-                            num = text_split[2]
-                            customrs.delete(num)
-                            try:
-                                web_client.chat_update(
-                                    channel=channel_id,
-                                    text="Deleted Custom Reply.",
-                                    ts=timestamp
-                                )
-                            except SlackApiError as e:
-                                print(Prefixes.error + str(e))
-                    elif action == "list":
-                        blocks = []
-                        if len(customrs.custom_replies) > 0:
-                            for custom_reply in customrs.custom_replies:
-                                blocks.append({
-                                    "type": "section",
-                                    "text": {
-                                        "type": "mrkdwn",
-                                        "text": "*#*: {}\n*Trigger:* {}\n*Reply:* {}\n*Strict:* {}".format(customrs.custom_replies.index(custom_reply), custom_reply['trigger'], custom_reply['reply'], custom_reply['is_strict'])
-                                    }
-                                })
-                            try:
-                                web_client.chat_update(
-                                    channel=channel_id,
-                                    blocks=blocks,
-                                    ts=timestamp
-                                )
-                            except SlackApiError as e:
-                                print(Prefixes.error + str(e))
-                        else:
-                            try:
-                                web_client.chat_update(
-                                    channel=channel_id,
-                                    text="No Custom Replies Set! Add some to your config or use the customrs command.",
-                                    ts=timestamp
-                                )
-                            except SlackApiError as e:
-                                print(Prefixes.error + str(e))
+                        print(Prefixes.error + 'Custom Replies are disabled until regex issues are fixed.')
+    #             if len(text_split) < 2:
+    #                 try:
+    #                     web_client.chat_update(
+    #                         channel=channel_id,
+    #                         text="Missing Arguments. Check the wiki for more information.",
+    #                         ts=timestamp
+    #                     )
+    #                 except SlackApiError as e:
+    #                     print(Prefixes.error + 'Missing Args for Command!')
+    #             else:
+    #                 action = text_split[1]
+    #                 if action == "add":
+    #                     if len(text_split) < 4:
+    #                         try:
+    #                             web_client.chat_update(
+    #                                 channel=channel_id,
+    #                                 text="Missing Arguments. Check the wiki for more information.",
+    #                                 ts=timestamp
+    #                             )
+    #                         except SlackApiError as e:
+    #                             print(Prefixes.error + 'Missing Args for Command!')
+    #                     else:
+    #                         print(text)
+    #                         query = r'[a-z ]+"(.+)" "(.+)"'
+    #                         print(query)
+    #                         match = re.search(query, text)
+    #                         print(match)
+    #                         trigger = match.group(1)
+    #                         reply = match.group(2)
+    #                         is_strict = text_split[-1]
+    #                         if is_strict == "strict":
+    #                             is_strict = True
+    #                         else:
+    #                             is_strict = False
+    #                         custom_r = {
+    #                             'trigger': trigger,
+    #                             'reply': reply,
+    #                             'is_strict': is_strict
+    #                         }
+    #                         customrs.add(custom_r)
+    #                         try:
+    #                             web_client.chat_update(
+    #                                 channel=channel_id,
+    #                                 text="Added Custom Reply. Trigger is \"{}\" and Reply will be \"{}\".\nStrict: {}".format(trigger, reply, is_strict),
+    #                                 ts=timestamp
+    #                             )
+    #                         except SlackApiError as e:
+    #                             print(Prefixes.error + str(e))
+    #                 elif action == "delete":
+    #                     if len(text_split) < 3:
+    #                         try:
+    #                             web_client.chat_update(
+    #                                 channel=channel_id,
+    #                                 text="Missing Arguments. Check the wiki for more information.",
+    #                                 ts=timestamp
+    #                             )
+    #                         except SlackApiError as e:
+    #                             print(Prefixes.error + 'Missing Args for Command!')
+    #                     else:
+    #                         num = text_split[2]
+    #                         customrs.delete(num)
+    #                         try:
+    #                             web_client.chat_update(
+    #                                 channel=channel_id,
+    #                                 text="Deleted Custom Reply.",
+    #                                 ts=timestamp
+    #                             )
+    #                         except SlackApiError as e:
+    #                             print(Prefixes.error + str(e))
+    #                 elif action == "list":
+    #                     blocks = []
+    #                     if len(customrs.custom_replies) > 0:
+    #                         for custom_reply in customrs.custom_replies:
+    #                             blocks.append({
+    #                                 "type": "section",
+    #                                 "text": {
+    #                                     "type": "mrkdwn",
+    #                                     "text": "*#*: {}\n*Trigger:* {}\n*Reply:* {}\n*Strict:* {}".format(customrs.custom_replies.index(custom_reply), custom_reply['trigger'], custom_reply['reply'], custom_reply['is_strict'])
+    #                                 }
+    #                             })
+    #                         try:
+    #                             web_client.chat_update(
+    #                                 channel=channel_id,
+    #                                 blocks=blocks,
+    #                                 ts=timestamp
+    #                             )
+    #                         except SlackApiError as e:
+    #                             print(Prefixes.error + str(e))
+    #                     else:
+    #                         try:
+    #                             web_client.chat_update(
+    #                                 channel=channel_id,
+    #                                 text="No Custom Replies Set! Add some to your config or use the customrs command.",
+    #                                 ts=timestamp
+    #                             )
+    #                         except SlackApiError as e:
+    #                             print(Prefixes.error + str(e))
 
 def customrsd(**payload):
     data = payload['data']
