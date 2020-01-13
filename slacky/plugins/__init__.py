@@ -342,7 +342,7 @@ def reactrand(**payload):
                         name=random.choice(emojis)
                     )
                 except SlackApiError as e:
-                        print(Prefixes.error + e)
+                    print(Prefixes.error + str(e))
 
 def reactspam(**payload):
     data = payload['data']
@@ -363,7 +363,7 @@ def reactspam(**payload):
                         ts=timestamp
                     )
                 except SlackApiError as e:
-                        print(Prefixes.error + e)
+                    print(Prefixes.error + str(e))
                 conv_info = client.conversations_history(channel=channel_id, count=1)
                 latest_ts = conv_info['messages'][0]['ts']
                 for _ in range(23):
@@ -374,7 +374,7 @@ def reactspam(**payload):
                             name=random.choice(emojis)
                         )
                     except SlackApiError as e:
-                        print(Prefixes.error + e)
+                        print(Prefixes.error + str(e))
 
 def sub_space(**payload):
     data = payload['data']
@@ -406,7 +406,7 @@ def sub_space(**payload):
                             ts=timestamp
                         )
                     except SlackApiError as e:
-                            print(Prefixes.error + e)
+                        print(Prefixes.error + str(e))
                         
 def delete(**payload):
     data = payload['data']
@@ -442,7 +442,7 @@ def delete(**payload):
                                 ts=ts
                             )
                         except SlackApiError as e:
-                            print(Prefixes.error + e)
+                            print(Prefixes.error + str(e))
                         
 
 def shift(**payload):
@@ -482,7 +482,7 @@ def shift(**payload):
                             ts=timestamp
                         )
                     except SlackApiError as e:
-                            print(Prefixes.error + e)
+                        print(Prefixes.error + str(e))
 
 def info(**payload):
     data = payload['data']
@@ -512,7 +512,7 @@ To See Commands Run: {}help
                     ts=timestamp
                 )
             except SlackApiError as e:
-                print(Prefixes.error + e)
+                print(Prefixes.error + str(e))
 
 def howdoicmd(**payload):
     data = payload['data']
@@ -551,7 +551,7 @@ def howdoicmd(**payload):
                         ts=timestamp
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + e)
+                    print(Prefixes.error + str(e))
 
 def heartbeat(**payload):
     data = payload['data']
@@ -569,7 +569,7 @@ def heartbeat(**payload):
                     ts=timestamp
                 )
             except SlackApiError as e:
-                print(Prefixes.error + e)
+                print(Prefixes.error + str(e))
 
 def react(**payload):
     data = payload['data']
@@ -589,7 +589,7 @@ def react(**payload):
                         ts=timestamp
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + e)
+                    print(Prefixes.error + str(e))
                 emoji = text_split[1]
                 print(Prefixes.event + 'Ran Command: react')
                 conv_info = client.conversations_info(channel=channel_id)
@@ -602,7 +602,7 @@ def react(**payload):
                         name=emoji
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + e)
+                    print(Prefixes.error + str(e))
 
 def listenerd(**payload):
     data = payload['data']
@@ -643,7 +643,7 @@ def listenercmd(**payload):
                                 ts=timestamp
                             )
                         except SlackApiError as e:
-                            print(Prefixes.error + e)
+                            print(Prefixes.error + str(e))
                     elif action == 'list':
                         listeners = ""
                         for ear in listener.listeners:
@@ -655,7 +655,7 @@ def listenercmd(**payload):
                                 ts=timestamp
                             )
                         except SlackApiError as e:
-                            print(Prefixes.error + e)
+                            print(Prefixes.error + str(e))
                     elif action == 'delete':
                         listener.delete(phrase)
                         print(Prefixes.event + 'Listener Deleted:', phrase)
@@ -666,7 +666,7 @@ def listenercmd(**payload):
                                 ts=timestamp
                             )
                         except SlackApiError as e:
-                            print(Prefixes.error + e)
+                            print(Prefixes.error + str(e))
 
 def xkcd(**payload):
     data = payload['data']
@@ -702,4 +702,4 @@ def xkcd(**payload):
                         ts=timestamp
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + e)
+                    print(Prefixes.error + str(e))

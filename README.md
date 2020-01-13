@@ -77,6 +77,11 @@ The bot reads from a config file. This config file will be generated through the
 
 ## Changelog:
 
+### Update 1.1.4:
+
+  - Fix Custom Replies
+  - More Error Handling
+
 ### Update 1.1.3:
 
   - Better Error Handling

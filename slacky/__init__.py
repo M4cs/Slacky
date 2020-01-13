@@ -80,7 +80,7 @@ try:
         config_path = args.config
     else:
         config_path = './config.json'
-    print(Prefixes.start + 'Welcome to Slacky v1.1.3 | The First Python Self-Bot for Slack!')
+    print(Prefixes.start + 'Welcome to Slacky v1.1.4 | The First Python Self-Bot for Slack!')
     print(Prefixes.event + 'Searching for New Updates...')
     with open('version.txt', 'r') as file:
         version = str(file.read())
