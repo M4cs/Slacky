@@ -115,8 +115,7 @@ def customrscmd(**payload):
                                 print(Prefixes.error + str(e))
                                 bot.error_count += 1
                         else:
-                            query = r'''["'](.*?)["']'''
-                            ans = re.findall(query, text)
+                            ans = re.findall(r'["“‘\'](.*?)[\'’”"]',  text)
                             trigger = ans[0]
                             reply = ans[1]
                             is_strict = text_split[-1]

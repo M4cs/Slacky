@@ -76,6 +76,11 @@ The bot reads from a config file. This config file will be generated through the
 
 ## Changelog:
 
+### Update 1.2.1:
+
+  - Fix `customrs` command
+  - Regex sucks
+
 ### Update 1.2:
 
   - Add `stats, space, ud` commands.
