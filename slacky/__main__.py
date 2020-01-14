@@ -22,6 +22,14 @@ def _space(**payload):
     return space(**payload)
 
 @slack.RTMClient.run_on(event='message')
+def _animations(**payload):
+    return animations(**payload)
+
+@slack.RTMClient.run_on(event='message')
+def _errors(**payload):
+    return errors(**payload)
+
+@slack.RTMClient.run_on(event='message')
 def _ud(**payload):
     return ud(**payload)
 

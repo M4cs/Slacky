@@ -76,6 +76,11 @@ The bot reads from a config file. This config file will be generated through the
 
 ## Changelog:
 
+### Update 1.3:
+
+  - Adds `animations` and the `ani` command. Read Wiki for more info on animations.
+  - New bots error handling and `errors` command to display errors triggered
+
 ### Update 1.2.2:
 
   - Fix emoji handling in the `react` command
@@ -186,6 +191,7 @@ These will be improved over time
 | shift     | CrEaTe ShIfT tExT lIkE tHiS            | ~shift phrase               |
 | subspace  | Replace spaces with emojis             | ~subspace :emoji: msg       |
 | space     | Add a space in between each character  | ~space phrase               |
+| ani       | Run animation from animation folder    | [Read Wiki](https://github.com/M4cs/Slacky/wiki) |
 | ud        | Get urban dictionary definiton         | ~ud query                   |
 | setprefix | Sets bot command prefix                | ~setprefix prefix           |
 | xkcd      | Get Daily xkcd comic                   | ~xkcd                         |

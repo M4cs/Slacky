@@ -11,6 +11,127 @@ import httpx
 import time
 import random
 import re
+import glob
+import os
+import ntpath
+
+def errors(**payload):
+    data = payload['data']
+    channel_id = data['channel']
+    user = data.get('user')
+    timestamp = data['ts']
+    if check_user(user):
+        web_client = client
+        text = data.get('text')
+        if text:
+            text_split = text.split(' ')
+            cmd = text_split[0]
+            if cmd == config['prefix'] + 'errors':
+                print(Prefixes.event + 'Ran command: errors')
+                if len(bot.errors) > 0:
+                    blocks = [
+                        {
+                            'type': 'section',
+                            'text': {
+                                'type': 'mrkdwn',
+                                'text': '*Slacky Bot Errors:*'
+                            }
+                        }       
+                    ]
+                    msg = ""
+                    for error in bot.errors:
+                        msg += str(error + '\n')
+                    blocks.append({
+                        'type': 'section',
+                        'text': {
+                            'type': 'plain_text',
+                            'text': '```' + msg + '```'
+                        }
+                    })
+                    try:
+                        web_client.chat_update(
+                            channel=channel_id,
+                            ts=timestamp,
+                            blocks=blocks
+                        )
+                    except SlackApiError as e:
+                        bot.error(e)
+                        bot.error_count += 1
+                else:
+                    try:
+                        web_client.chat_update(
+                            channel=channel_id,
+                            ts=timestamp,
+                            text='No Errors Triggered!'
+                        )
+                    except SlackApiError as e:
+                        bot.error(e)
+                        bot.error_count += 1
+
+def animations(**payload):
+    data = payload['data']
+    channel_id = data['channel']
+    user = data.get('user')
+    timestamp = data['ts']
+    if check_user(user):
+        web_client = client
+        text = data.get('text')
+        if text:
+            text_split = text.split(' ')
+            cmd = text_split[0]
+            if cmd == config['prefix'] + 'ani':
+                print(Prefixes.event + 'Ran command: ani')
+                bot.command_count += 1
+                if len(text_split) < 2:
+                    try:
+                        web_client.chat_delete(
+                            channel=channel_id,
+                            ts=timestamp
+                        )
+                    except SlackApiError as e:
+                        bot.error(e)
+                        bot.error_count += 1
+                else:
+                    target_file = None
+                    for file in glob.glob('animations/*.txt'):
+                        if ntpath.basename(file).strip('.txt') == ' '.join(text_split[1:]):
+                            target_file = os.path.realpath(file)
+                    if target_file:
+                        with open(target_file, 'r') as anif:
+                            full_ani = anif.read()
+                        lines = full_ani.split('\n')
+                        interval = lines[0]
+                        msgs = []
+                        tmp_msg = []
+                        for line in lines[1:]:
+                            if ''.join(line).startswith('[f#]'):
+                                line = '[f#]'
+                            if line != '[f#]':
+                                tmp_msg.append(line)
+                            else:
+                                msgs.append(tmp_msg)
+                                tmp_msg = []
+                        for msg in msgs:
+                            try:
+                                web_client.chat_update(
+                                    channel=channel_id,
+                                    ts=timestamp,
+                                    text='\n'.join(msg)
+                                )
+                            except SlackApiError as e:
+                                bot.error(e)
+                                bot.error_count += 1
+                            time.sleep(float(interval))
+                    else:
+                        try:
+                            web_client.chat_update(
+                                channel=channel_id,
+                                ts=timestamp,
+                                text="**No animation with that name found!**"
+                            )
+                        except SlackApiError as e:
+                            bot.error(e)
+                            bot.error_count += 1
 
 def stats(**payload):
     data = payload['data']
@@ -72,7 +193,7 @@ def stats(**payload):
                         blocks=blocks
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + str(e))
+                    bot.error(e)
 
 def customrscmd(**payload):
     bot.message_count += 1
@@ -98,7 +219,7 @@ def customrscmd(**payload):
                         )
                         bot.warning_count += 1
                     except SlackApiError as e:
-                        print(Prefixes.error + str(e))
+                        bot.error(e)
                         bot.error_count += 1
                 else:
                     action = text_split[1]
@@ -112,7 +233,7 @@ def customrscmd(**payload):
                                 )
                                 bot.warning_count += 1
                             except SlackApiError as e:
-                                print(Prefixes.error + str(e))
+                                bot.error(e)
                                 bot.error_count += 1
                         else:
                             ans = re.findall(r'["“‘\'](.*?)[\'’”"]',  text)
@@ -136,7 +257,7 @@ def customrscmd(**payload):
                                     ts=timestamp
                                 )
                             except SlackApiError as e:
-                                print(Prefixes.error + str(e))
+                                bot.error(e)
                                 bot.error_count += 1
                     elif action == "delete":
                         if len(text_split) < 3:
@@ -148,7 +269,7 @@ def customrscmd(**payload):
                                 )
                                 bot.warning_count += 1
                             except SlackApiError as e:
-                                print(Prefixes.error + str(e))
+                                bot.error(e)
                                 bot.error_count += 1
                         else:
                             num = text_split[2]
@@ -160,7 +281,7 @@ def customrscmd(**payload):
                                     ts=timestamp
                                 )
                             except SlackApiError as e:
-                                print(Prefixes.error + str(e))
+                                bot.error(e)
                                 bot.error_count += 1
                     elif action == "list":
                         blocks = []
@@ -180,7 +301,7 @@ def customrscmd(**payload):
                                     ts=timestamp
                                 )
                             except SlackApiError as e:
-                                print(Prefixes.error + str(e))
+                                bot.error(e)
                                 bot.error_count += 1
                         else:
                             try:
@@ -190,7 +311,7 @@ def customrscmd(**payload):
                                     ts=timestamp
                                 )
                             except SlackApiError as e:
-                                print(Prefixes.error + str(e))
+                                bot.error(e)
                                 bot.error_count += 1
 
 def customrsd(**payload):
@@ -213,7 +334,7 @@ def customrsd(**payload):
                                     ts=timestamp
                                 )
                             except SlackApiError as e:
-                                print(Prefixes.error + str(e))
+                                bot.error(e)
                                 bot.error_count += 1
                     else:
                         if text.lower() == custom_reply['trigger'].lower():
@@ -225,7 +346,7 @@ def customrsd(**payload):
                                     ts=timestamp
                                 )
                             except SlackApiError as e:
-                                print(Prefixes.error + str(e))
+                                bot.error(e)
                                 bot.error_count += 1
     
 def ascii(**payload):
@@ -250,7 +371,7 @@ def ascii(**payload):
                             ts=timestamp
                         )
                     except SlackApiError as e:
-                        print(Prefixes.error + str(e))
+                        bot.error(e)
                         bot.error_count += 1
                 else:
                     rest = ' '.join(text_split[1:])
@@ -263,7 +384,7 @@ def ascii(**payload):
                             ts=timestamp
                         )
                     except SlackApiError as e:
-                        print(Prefixes.error + str(e))
+                        bot.error(e)
                         bot.error_count += 1
     
 def status(**payload):
@@ -299,7 +420,7 @@ def status(**payload):
                                 ts=timestamp
                         )
                     except SlackApiError as e:
-                        print(Prefixes.error + str(e))
+                        bot.error(e)
                         bot.error_count += 1
                         try:
                             web_client.chat_update(
@@ -308,7 +429,7 @@ def status(**payload):
                                 ts=timestamp
                             )
                         except SlackApiError as e:
-                            print(Prefixes.error + str(e))
+                            bot.error(e)
                             bot.error_count += 1
 
 def setprefix(**payload):
@@ -333,7 +454,7 @@ def setprefix(**payload):
                             ts=timestamp
                         )
                     except SlackApiError as e:
-                        print(Prefixes.error + str(e))
+                        bot.error(e)
                         bot.error_count += 1
                 else:
                     prefix = text_split[1]
@@ -351,7 +472,7 @@ def setprefix(**payload):
                             ts=timestamp
                         )
                     except SlackApiError as e:
-                        print(Prefixes.error + str(e))
+                        bot.error(e)
                         bot.error_count += 1
 
 def shelp(**payload):
@@ -376,6 +497,7 @@ def shelp(**payload):
                     ['stats', 'Get stats about the bot running', '~stats'],
                     ['customrs', 'Set custom replies for messages.', 'Read Wiki'],
                     ['ascii', 'Generate ASCII Art from Text', '~ascii <phrase>'],
+                    ['ani', 'Run animation from animations folder', '~ani <name of txt file>'],
                     ['space', 'Add spaces between characters', '~space <phrase>'],
                     ['shift', 'CrEaTe ShIfT tExT lIkE tHiS', '~shift <phrase>'],
                     ['subspace', 'Replace spaces with emojis', '~subspace <:emoji:> <msg>'],
@@ -404,7 +526,7 @@ def shelp(**payload):
                         ts=timestamp
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + str(e))
+                    bot.error(e)
                     bot.error_count += 1
 
 def reactrand(**payload):
@@ -427,7 +549,7 @@ def reactrand(**payload):
                         ts=timestamp
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + str(e))
+                    bot.error(e)
                     bot.error_count += 1
                 conv_info = client.conversations_history(channel=channel_id, count=1)
                 latest_ts = conv_info['messages'][0]['ts']
@@ -438,7 +560,7 @@ def reactrand(**payload):
                         name=random.choice(emojis)
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + str(e))
+                    bot.error(e)
                     bot.error_count += 1
 
 def reactspam(**payload):
@@ -461,7 +583,7 @@ def reactspam(**payload):
                         ts=timestamp
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + str(e))
+                    bot.error(e)
                     bot.error_count += 1
                 conv_info = client.conversations_history(channel=channel_id, count=1)
                 latest_ts = conv_info['messages'][0]['ts']
@@ -473,7 +595,7 @@ def reactspam(**payload):
                             name=random.choice(emojis)
                         )
                     except SlackApiError as e:
-                        print(Prefixes.error + str(e))
+                        bot.error(e)
                         bot.error_count += 1
                         
 def ud(**payload):
@@ -520,7 +642,7 @@ def ud(**payload):
                             blocks=blocks
                         )
                     except SlackApiError as e:
-                        print(Prefixes.error + str(e))
+                        bot.error(e)
                         bot.error_count += 1
                         
 def space(**payload):
@@ -554,7 +676,7 @@ def space(**payload):
                             text=new_string
                         )
                     except SlackApiError as e:
-                        print(Prefixes.error + str(e))
+                        bot.error(e)
 
 def sub_space(**payload):
     data = payload['data']
@@ -588,7 +710,7 @@ def sub_space(**payload):
                             ts=timestamp
                         )
                     except SlackApiError as e:
-                        print(Prefixes.error + str(e))
+                        bot.error(e)
                         bot.error_count += 1
                         
 def delete(**payload):
@@ -627,7 +749,7 @@ def delete(**payload):
                                 ts=ts
                             )
                         except SlackApiError as e:
-                            print(Prefixes.error + str(e))
+                            bot.error(e)
                             bot.error_count += 1
                         
 
@@ -670,7 +792,7 @@ def shift(**payload):
                             ts=timestamp
                         )
                     except SlackApiError as e:
-                        print(Prefixes.error + str(e))
+                        bot.error(e)
                         bot.error_count += 1
 
 def info(**payload):
@@ -702,7 +824,7 @@ To See Commands Run: {}help
                     ts=timestamp
                 )
             except SlackApiError as e:
-                print(Prefixes.error + str(e))
+                bot.error(e)
                 bot.error_count += 1
 
 def howdoicmd(**payload):
@@ -733,7 +855,7 @@ def howdoicmd(**payload):
                         ts=timestamp
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + str(e))
+                    bot.error(e)
                     bot.error_count += 1
                 parser = howdoi.get_parser()
                 args = vars(parser.parse_args(text_split[1:]))
@@ -745,7 +867,7 @@ def howdoicmd(**payload):
                         ts=timestamp
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + str(e))
+                    bot.error(e)
                     bot.error_count += 1
 
 def heartbeat(**payload):
@@ -765,7 +887,7 @@ def heartbeat(**payload):
                     ts=timestamp
                 )
             except SlackApiError as e:
-                print(Prefixes.error + str(e))
+                bot.error(e)
                 bot.error_count += 1
 
 def react(**payload):
@@ -786,7 +908,7 @@ def react(**payload):
                         ts=timestamp
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + str(e))
+                    bot.error(e)
                     bot.error_count += 1
                 emoji = text_split[1]
                 print(Prefixes.event + 'Ran Command: react')
@@ -801,7 +923,7 @@ def react(**payload):
                         name=emoji.replace(':', '')
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + str(e))
+                    bot.error(e)
                     bot.error_count += 1
 
 def listenerd(**payload):
@@ -845,7 +967,7 @@ def listenercmd(**payload):
                                 ts=timestamp
                             )
                         except SlackApiError as e:
-                            print(Prefixes.error + str(e))
+                            bot.error(e)
                             bot.error_count += 1
                     elif action == 'list':
                         bot.command_count += 1
@@ -859,7 +981,7 @@ def listenercmd(**payload):
                                 ts=timestamp
                             )
                         except SlackApiError as e:
-                            print(Prefixes.error + str(e))
+                            bot.error(e)
                             bot.error_count += 1
                     elif action == 'delete':
                         listener.delete(phrase)
@@ -872,7 +994,7 @@ def listenercmd(**payload):
                                 ts=timestamp
                             )
                         except SlackApiError as e:
-                            print(Prefixes.error + str(e))
+                            bot.error(e)
                             bot.error_count += 1
 
 def xkcd(**payload):
@@ -910,5 +1032,5 @@ def xkcd(**payload):
                         ts=timestamp
                     )
                 except SlackApiError as e:
-                    print(Prefixes.error + str(e))
+                    bot.error(e)
                     bot.error_count += 1

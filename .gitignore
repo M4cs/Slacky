@@ -2,3 +2,4 @@ config.json
 **/*__pycache__
 **/*.pyc
 *.json
+**/*wormy.txt
