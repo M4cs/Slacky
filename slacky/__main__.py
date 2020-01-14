@@ -102,6 +102,8 @@ def _status(**payload):
 def _example(**payload):
     return custom_example(**payload)
 
+def run_client(rtm):
+    rtm.start()
 
 slack_token = config['token']
 rtmclient = slack.RTMClient(token=slack_token)
@@ -109,7 +111,11 @@ print(Prefixes.event + 'Default Plugins Loaded')
 print(Prefixes.event + 'Custom Plugins Loaded (If Any)')
 try:
     print(Prefixes.event + 'Running Bot...\n')
-    rtmclient.start()
+    run_client(rtmclient)
 except KeyboardInterrupt:
     print(Prefixes.event + 'Shutdown Called')
     exit(0)
+except Exception as e:
+    bot.error(e)
+    bot.error_count += 1
+    run_client(rtmclient)

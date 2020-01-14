@@ -19,7 +19,7 @@ def errors(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -72,7 +72,7 @@ def animations(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -92,9 +92,13 @@ def animations(**payload):
                         bot.error(e)
                         bot.error_count += 1
                 else:
+                    if len(text_split) == 2:
+                        loop = 1
+                    elif len(text_split) == 3:
+                        loop = int(text_split[2])
                     target_file = None
                     for file in glob.glob('animations/*.txt'):
-                        if ntpath.basename(file).strip('.txt') == ' '.join(text_split[1:]):
+                        if ntpath.basename(file).strip('.txt') == text_split[1]:
                             target_file = os.path.realpath(file)
                     if target_file:
                         with open(target_file, 'r') as anif:
@@ -111,17 +115,18 @@ def animations(**payload):
                             else:
                                 msgs.append(tmp_msg)
                                 tmp_msg = []
-                        for msg in msgs:
-                            try:
-                                web_client.chat_update(
-                                    channel=channel_id,
-                                    ts=timestamp,
-                                    text='\n'.join(msg)
-                                )
-                            except SlackApiError as e:
-                                bot.error(e)
-                                bot.error_count += 1
-                            time.sleep(float(interval))
+                        for i in range(loop):
+                            for msg in msgs:
+                                try:
+                                    web_client.chat_update(
+                                        channel=channel_id,
+                                        ts=timestamp,
+                                        text='```' + '\n'.join(msg) + '```'
+                                    )
+                                except SlackApiError as e:
+                                    bot.error(e)
+                                    bot.error_count += 1
+                                time.sleep(float(interval))
                     else:
                         try:
                             web_client.chat_update(
@@ -137,7 +142,7 @@ def stats(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -200,7 +205,7 @@ def customrscmd(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -318,7 +323,7 @@ def customrsd(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     text = data.get('text')
     if text:
         if user != config['user']:
@@ -353,7 +358,7 @@ def ascii(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -391,7 +396,7 @@ def status(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -436,7 +441,7 @@ def setprefix(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -479,7 +484,7 @@ def shelp(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -533,7 +538,7 @@ def reactrand(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -567,7 +572,7 @@ def reactspam(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -602,7 +607,7 @@ def ud(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -649,7 +654,7 @@ def space(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -682,7 +687,7 @@ def sub_space(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -717,7 +722,7 @@ def delete(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -757,7 +762,7 @@ def shift(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -799,7 +804,7 @@ def info(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         if str(config['prefix'] + 'info') == data.get('text', []):
@@ -831,7 +836,7 @@ def howdoicmd(**payload):
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -874,7 +879,7 @@ def heartbeat(**payload):
     data = payload['data']
     user = data.get('user')
     channel_id = data['channel']
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         if str(config['prefix'] + 'heartbeat') == data.get('text', []):
@@ -894,7 +899,7 @@ def react(**payload):
     data = payload['data']
     user = data.get('user')
     channel_id = data['channel']
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -930,7 +935,7 @@ def listenerd(**payload):
     data = payload['data']
     user = data.get('user')
     channel_id = data['channel']
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     text = data.get('text')
     if text:
         if not config['prefix'] in text:
@@ -942,7 +947,7 @@ def listenercmd(**payload):
     data = payload['data']
     user = data.get('user')
     channel_id = data['channel']
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')
@@ -1001,7 +1006,7 @@ def xkcd(**payload):
     data = payload['data']
     user = data.get('user')
     channel_id = data['channel']
-    timestamp = data['ts']
+    timestamp = data.get('ts')
     if check_user(user):
         web_client = client
         text = data.get('text')

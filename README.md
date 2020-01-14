@@ -60,6 +60,12 @@ Assumes prefix is `~`
 
 ## Changelog:
 
+### Update 1.3.2:
+
+  - More Error Handling
+  - Adds `rick` animation as default
+  - Adds looping argument to `ani` command. New syntax `ani [ani_name] [loop count]`
+
 ### Update 1.3.1:
 
   - Hotfix for `errors` command formatting

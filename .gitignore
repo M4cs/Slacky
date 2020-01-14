@@ -3,3 +3,6 @@ config.json
 **/*.pyc
 *.json
 **/*wormy.txt
+**/*wormy2.txt
+Dockerfile.*
+max.yml
