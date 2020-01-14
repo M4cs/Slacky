@@ -44,7 +44,7 @@ def errors(**payload):
                     blocks.append({
                         'type': 'section',
                         'text': {
-                            'type': 'plain_text',
+                            'type': 'mrkdwn',
                             'text': '```' + msg + '```'
                         }
                     })

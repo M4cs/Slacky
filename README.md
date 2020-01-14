@@ -58,6 +58,10 @@ Assumes prefix is `~`
 
 ## Changelog:
 
+### Update 1.3.1:
+
+  - Hotfix for `errors` command formatting
+
 ### Update 1.3:
 
   - Adds `animations` and the `ani` command. Read Wiki for more info on animations.
