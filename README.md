@@ -16,7 +16,7 @@ Slack as far as I can see have no rules against using selfbots so the only peopl
 
 Discord for Support: https://discord.gg/JjZwJVF
 
-## This README doesn't have all the info! I've written a readme with a bunch of info on the bot [here](https://github.com/M4cs/Slacky/wiki). Check it out for information on how to Install, Setup, and Customize Slacky!
+### This README doesn't have all the info! I've written a readme with a bunch of info on the bot [here](https://github.com/M4cs/Slacky/wiki). Check it out for information on how to Install, Setup, and Customize Slacky!
 
 <p align="center">
   <center><h2 align="center">Slack Client</h2><br><p align="center"><img src="https://github.com/M4cs/Slacky/blob/master/slacky.gif"></p></center>
