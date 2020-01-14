@@ -18,6 +18,8 @@ Discord for Support: https://discord.gg/JjZwJVF
 
 ### This README doesn't have all the info! I've written a readme with a bunch of info on the bot [here](https://github.com/M4cs/Slacky/wiki). Check it out for information on how to Install, Setup, and Customize Slacky!
 
+### Read how to run the bot in multiple workspaces [here](https://github.com/M4cs/Slacky/wiki/Multiple-Workspaces)
+
 <p align="center">
   <center><h2 align="center">Slack Client</h2><br><p align="center"><img src="https://github.com/M4cs/Slacky/blob/master/slacky.gif"></p></center>
 </p>
