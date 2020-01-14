@@ -26,54 +26,6 @@ Discord for Support: https://discord.gg/JjZwJVF
   <center><h2 align="center">Bot Server</h2><br><img src="https://github.com/M4cs/Slacky/blob/master/example.gif"></center>
 </p>
 
-**Plugin Packs:**
-
-While there are non yet, if and when people end up making plugin packs, they will be displayed here. If you make one please make a PR to the README with a link to your plugin pack's repo!
-
-## Getting Started:
-
-**Requirements:**
-- Python 3
-- Slack
-- Internet Connection
-
-**Installing:**
-
-From Source
-
-```
-git clone https://github.com/M4cs/Slacky
-cd Slacky/
-pip3 install -r requirements.txt
-python3 -m slacky
-
-# From a new/diff config file
-python3 -m slacky --config workspace2.json
-```
-
-Using Docker (Only works with 1 config file)
-
-```
-# Run once to setup Config
-python3 -m slacky
-# Run again using Docker
-docker-compose up
-```
-
-**Configuration Setup:**
-
-The bot reads from a config file. This config file will be generated through the wizard if you have not already made one. If you specify a new filename with the `--config` command that config file will be loaded and if it cannot be found, that config file will be created and you'll go through the wizard again. Below are links for grabbing the information needed for the config:
-
-**Default Prefix (Use ~setprefix or set in config on startup to change):** `~`
-
-**Get your legacy token for the bot:** https://api.slack.com/custom-integrations/legacy-tokens
-
-**Get your User ID:** 
-
-<p align="center">
-  <center><img src="https://help.workast.com/hc/article_attachments/360042136214/Slack_member_ID.gif" />
-</p>
-
 ## Changelog:
 
 ### Update 1.3:
