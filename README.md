@@ -29,12 +29,13 @@ Discord for Support: https://discord.gg/JjZwJVF
 
 ## Default Commands
 
-These will be improved over time
+Assumes prefix is `~`
 
 | Command   | Description                            | Usage                         |
 | :--: | :--: | :--: |
 | heartbeat | Check if bot is up or not              | ~heartbeat                    |
 | info      | Get info about the bot                 | ~info                         |
+| errors    | See all errors the bot has encountered | ~errors                       |
 | customrs  | Manage custom replies to messages      | [Read Wiki](https://github.com/M4cs/Slacky/wiki) |
 | stats     | Get info about the bot running         | ~stats                        |
 | ascii     | Generate ASCII art from a phrase       | ~ascii msg |
