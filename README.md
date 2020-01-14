@@ -16,7 +16,7 @@ Slack as far as I can see have no rules against using selfbots so the only peopl
 
 Discord for Support: https://discord.gg/JjZwJVF
 
-### This README has a lot of info, it can be a bit messy. For more information on commands, custom plugins, listeners, and more, check out the Wiki [here](https://github.com/M4cs/Slacky/wiki)
+## This README doesn't have all the info! I've written a readme with a bunch of info on the bot [here](https://github.com/M4cs/Slacky/wiki). Check it out for information on how to Install, Setup, and Customize Slacky!
 
 <p align="center">
   <center><h2 align="center">Slack Client</h2><br><p align="center"><img src="https://github.com/M4cs/Slacky/blob/master/slacky.gif"></p></center>
@@ -25,6 +25,35 @@ Discord for Support: https://discord.gg/JjZwJVF
 <p align="center">
   <center><h2 align="center">Bot Server</h2><br><img src="https://github.com/M4cs/Slacky/blob/master/example.gif"></center>
 </p>
+
+
+## Default Commands
+
+These will be improved over time
+
+| Command   | Description                            | Usage                         |
+| :--: | :--: | :--: |
+| heartbeat | Check if bot is up or not              | ~heartbeat                    |
+| info      | Get info about the bot                 | ~info                         |
+| customrs  | Manage custom replies to messages      | [Read Wiki](https://github.com/M4cs/Slacky/wiki) |
+| stats     | Get info about the bot running         | ~stats                        |
+| ascii     | Generate ASCII art from a phrase       | ~ascii msg |
+| shift     | CrEaTe ShIfT tExT lIkE tHiS            | ~shift phrase               |
+| subspace  | Replace spaces with emojis             | ~subspace :emoji: msg       |
+| space     | Add a space in between each character  | ~space phrase               |
+| ani       | Run animation from animation folder    | [Read Wiki](https://github.com/M4cs/Slacky/wiki) |
+| ud        | Get urban dictionary definiton         | ~ud query                   |
+| setprefix | Sets bot command prefix                | ~setprefix prefix           |
+| xkcd      | Get Daily xkcd comic                   | ~xkcd                         |
+| delete    | Delete X num of your msgs              | ~delete num_of_msgs           |
+| react     | React to last sent message             | ~react :emoji:                |
+| reactrand | React to with random emoji             | ~reactrand                    |
+| reactspam | Spam 23 Reactions (Notification Spam)  | ~randspam                     |
+| howdoi    | Find code snippets from stack overflow | ~howdoi loop over list python |
+| listener      | Add or remove listeners                | ~listener add/delete phrase |
+| listener list | List all listener words                | ~listener list                  |
+| help      | Display this message                   | ~help                         |
+
 
 ## Changelog:
 
@@ -128,33 +157,6 @@ def _custom_plugin(**payload):
 ```
 
 Now restart the bot and you will have loaded your custom plugin!
-
-## Default Commands
-
-These will be improved over time
-
-| Command   | Description                            | Usage                         |
-| :--: | :--: | :--: |
-| heartbeat | Check if bot is up or not              | ~heartbeat                    |
-| info      | Get info about the bot                 | ~info                         |
-| customrs  | Manage custom replies to messages      | [Read Wiki](https://github.com/M4cs/Slacky/wiki) |
-| stats     | Get info about the bot running         | ~stats                        |
-| ascii     | Generate ASCII art from a phrase       | ~ascii msg |
-| shift     | CrEaTe ShIfT tExT lIkE tHiS            | ~shift phrase               |
-| subspace  | Replace spaces with emojis             | ~subspace :emoji: msg       |
-| space     | Add a space in between each character  | ~space phrase               |
-| ani       | Run animation from animation folder    | [Read Wiki](https://github.com/M4cs/Slacky/wiki) |
-| ud        | Get urban dictionary definiton         | ~ud query                   |
-| setprefix | Sets bot command prefix                | ~setprefix prefix           |
-| xkcd      | Get Daily xkcd comic                   | ~xkcd                         |
-| delete    | Delete X num of your msgs              | ~delete num_of_msgs           |
-| react     | React to last sent message             | ~react :emoji:                |
-| reactrand | React to with random emoji             | ~reactrand                    |
-| reactspam | Spam 23 Reactions (Notification Spam)  | ~randspam                     |
-| howdoi    | Find code snippets from stack overflow | ~howdoi loop over list python |
-| listener      | Add or remove listeners                | ~listener add/delete phrase |
-| listener list | List all listener words                | ~listener list                  |
-| help      | Display this message                   | ~help                         |
 
 ## Contributing
 
