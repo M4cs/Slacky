@@ -1,3 +1,8 @@
+### Update 1.5:
+
+  - Huge refactor with `cmd_setup` function
+  - Error Handling
+
 ### Update 1.4.6:
 
   - Fix `winfo` formatting
