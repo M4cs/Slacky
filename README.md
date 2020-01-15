@@ -63,6 +63,11 @@ Assumes prefix is `~`
 
 ## Changelog:
 
+### Update 1.4.3:
+
+  - Uses attachments to make replies prettier
+  - Fixes `ani` command breaking
+
 ### Update 1.4.2:
 
   - Fix slowing bug due to hitting `winfo` each time
