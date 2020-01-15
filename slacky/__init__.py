@@ -25,6 +25,7 @@ class BotMetaData:
         self.warning_count = 0
         self.message_count = 0
         self.errors = []
+        self.msgstatus = False
         
     def error(self, e):
         print(Prefixes.error + str(e))

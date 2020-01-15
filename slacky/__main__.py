@@ -5,7 +5,7 @@ import slack
 import httpx
 import re
 
-print(Prefixes.event + 'Loading Plugins', end='\r')
+print(Prefixes.event + 'Loading Plugins')
 
 commands = {
         'heartbeat': lambda **payload: heartbeat(),
@@ -32,6 +32,7 @@ commands = {
         'shift' : lambda **payload: shift,
         'status': lambda **payload: status,
         'listener': lambda **payload: listenercmd,
+        'msgstatus': lambda  **payload: msgstatus
     }
 
 @slack.RTMClient.run_on(event='message')
@@ -44,17 +45,17 @@ def _cmdcheck(**payload):
     if not cmd:
         return "no command"
     cmd = cmd.group(1) if cmd.group(1) else cmd.group(2)
-    func = commands.get(cmd, None)()
-    if func is not None:
-        func(**payload)
-    return "done"
+    if cmd in commands.keys():
+        func = commands.get(cmd)()
+        if func:
+            return func(**payload)
 
 @slack.RTMClient.run_on(event='message')
 def _customrsd(**payload):
     return customrsd(**payload)
 
 @slack.RTMClient.run_on(event='message')
-def _listenercmd(**payload):
+def _listenerd(**payload):
     return listenerd(**payload)
 
 def run_client(rtm):
@@ -65,14 +66,15 @@ rtmclient = slack.RTMClient(token=slack_token)
 print(Prefixes.event + 'Default Plugins Loaded')
 print(Prefixes.event + 'Custom Plugins Loaded (If Any)')
 try:
-    print(Prefixes.event + 'Running Bot...\n')
+    print(Prefixes.event + 'Running Bot...')
+    print(Prefixes.start + 'Log Output:')
     run_client(rtmclient)
 except KeyboardInterrupt:
     print(Prefixes.event + 'Shutdown Called')
     exit(0)
-except Exception as e:
-    bot.error(e)
-    bot.error_count += 1
-    print(Prefixes.event + 'Attempting To Auto Reconnect...')
-    time.sleep(2)
-    run_client(rtmclient)
+# except Exception as e:
+#     bot.error(e)
+#     bot.error_count += 1
+#     print(Prefixes.event + 'Attempting To Auto Reconnect...')
+#     time.sleep(2)
+#     run_client(rtmclient)

@@ -4,6 +4,7 @@ from slacky.plugins.custom import *
 from slack.errors import SlackApiError
 from terminaltables import DoubleTable
 from howdoi import howdoi
+from threading import Thread
 from pyfiglet import Figlet
 import json
 import slack
@@ -34,6 +35,29 @@ def cmd_setup(command, **payload):
     else:
         return None, None, None, None, None, None, None
 
+def msgstatus(**payload):
+    data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('msgstatus', **payload)
+    if data:
+        if bot.msgstatus:
+            bot.msgstatus = False
+            try:
+                web_client.chat_update(
+                    channel=channel_id,
+                    ts=timestamp,
+                    text="On-Message Status Change Disabled"
+                )
+            except SlackApiError as e:
+                bot.error(e)
+        else:
+            bot.msgstatus = True
+            try:
+                web_client.chat_update(
+                    channel=channel_id,
+                    ts=timestamp,
+                    text="On-Message Status Change Enabled"
+                )
+            except SlackApiError as e:
+                bot.error(e)
 def winfo(**payload):
     data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('winfo', **payload)
     if data:
@@ -724,6 +748,10 @@ def shelp(**payload):
                             },
                             {
                                 "type": "mrkdwn",
+                                "text": "*msgstatus*\nEnable/Disable Random Emoji in Status on Msgs\n`~msgstatus`"
+                            },
+                            {
+                                "type": "mrkdwn",
                                 "text": "*subspace*\nSubstitute Every Space with an Emoji\n`~subspace <emoji>`\n"
                             },
                             {
@@ -1091,6 +1119,17 @@ def listenerd(**payload):
     data = payload['data']
     channel_id = data['channel']
     text = data.get('text')
+    if bot.msgstatus:
+        try:
+            client.users_profile_set(
+                profile={
+                    'status_emoji': ':' + str(random.choice(emojis)) + ':',
+                    'status_text': client.users_profile_get(user=config['user'])['profile'].get('status_text'),
+                    'status_expiration': 0
+                }
+            )
+        except SlackApiError as e:
+            pass
     if text:
         if not config['prefix'] in text:
             if len(listener.listeners) >= 1:
