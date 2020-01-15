@@ -1,4 +1,4 @@
-from slacky import config, client, Prefixes, listener, check_user, customrs, bot
+from slacky import config, client, Prefixes, listener, check_user, customrs, bot, version
 from slacky.constants.emojis import emojis
 from slacky.plugins.custom import *
 from slack.errors import SlackApiError
@@ -165,15 +165,11 @@ def uinfo(**payload):
                                         'type': 'mrkdwn',
                                         'text': '*Name:* {}\n*Status:* {}'.format(match['real_name'], match['profile'].get('status_text') if match['profile'].get('status_text') else 'N/A')
                                     },
-                                    'accessory': {
-                                        'type': 'image',
-                                        'image_url': match['profile'].get('image_512'),
-                                        'alt_text': 'Profile Picture'
-                                    }
-                                },
-                                {
-                                    'type': 'section',
                                     'fields': [
+                                        {
+                                            'type': 'mrkdwn',
+                                            'text': '*Title:* {}'.format(match['profile'].get('title') if match['profile'].get('title') else 'N/A')
+                                        },
                                         {
                                             'type': 'mrkdwn',
                                             'text': '*Username:* {}'.format(match['name'])
@@ -189,19 +185,23 @@ def uinfo(**payload):
                                         {
                                             'type': 'mrkdwn',
                                             'text': '*Phone:* {}'.format(match['profile'].get('phone') if match['profile'].get('phone') else 'N/A')
-                                        },
-                                        {
-                                            'type': 'mrkdwn',
-                                            'text': '*Title:* {}'.format(match['profile'].get('title') if match['profile'].get('title') else 'N/A')
                                         }
-                                    ]
+                                    ],
+                                    'accessory': {
+                                        'type': 'image',
+                                        'image_url': match['profile'].get('image_512'),
+                                        'alt_text': 'Profile Picture'
+                                    }
                                 }
                             ]
                             try:
                                 web_client.chat_update(
                                     channel=channel_id,
                                     ts=timestamp,
-                                    blocks=blocks
+                                    attachments=[{
+                                        'color': '#0f87ff',
+                                        'blocks': blocks
+                                    }]
                                 )
                             except SlackApiError as e:
                                 bot.error(e)
@@ -254,7 +254,10 @@ def errors(**payload):
                         web_client.chat_update(
                             channel=channel_id,
                             ts=timestamp,
-                            blocks=blocks
+                            attachments=[{
+                                'color': '#0f87ff',
+                                'blocks': blocks
+                            }]
                         )
                     except SlackApiError as e:
                         bot.error(e)
@@ -281,7 +284,7 @@ def animations(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == config['prefix'] + '':
+            if cmd == config['prefix'] + 'ani':
                 print(Prefixes.event + 'Ran command: ani')
                 bot.command_count += 1
                 if len(text_split) < 2:
@@ -397,7 +400,11 @@ def stats(**payload):
                     web_client.chat_update(
                         channel=channel_id,
                         ts=timestamp,
-                        blocks=blocks
+                        text="",
+                        attachments=[{
+                            'color': '#0f87ff',
+                            'blocks': blocks
+                        }]
                     )
                 except SlackApiError as e:
                     bot.error(e)
@@ -1016,22 +1023,27 @@ def info(**payload):
             print(Prefixes.event + 'Ran Command: info')
             bot.command_count += 1
             try:
+                attachment = [
+                    {
+                        "color": "#0f87ff",
+                        "blocks": [
+                            {
+                                "type": "section",
+                                "text": {
+                                    "type": "mrkdwn",
+                                    "text": """Running :slack: *Slacky* v{} by <https://twitter.com/maxbridgland|Max Bridgland>
+*Source Code*: <https://github.com/M4cs/Slacky|GitHub>
+*Wiki*: <https://github.com/M4cs/Slacky/wiki|GitHub Wiki>""".format(version, config['prefix'])
+                                }
+                            }
+                        ]
+                    }
+                ]
                 web_client.chat_update(
                     channel=channel_id,
-                    blocks=[{
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": """\
-Running :slack: *Slacky* by <https://twitter.com/maxbridgland|Max Bridgland>
-
-To See Commands Run: {}help
-
-*Source Code*: <https://github.com/M4cs/Slacky|GitHub>
-*Wiki*: <https://github.com/M4cs/Slacky/wiki|GitHub Wiki>""".format(config['prefix'])
-                        }
-                    }],
-                    ts=timestamp
+                    ts=timestamp,
+                    text="",
+                    attachments=attachment
                 )
             except SlackApiError as e:
                 bot.error(e)
@@ -1339,7 +1351,13 @@ def convinfo(**payload):
                             web_client.chat_update(
                                 channel=channel_id,
                                 ts=timestamp,
-                                blocks=blocks
+                                text='',
+                                attachments=[
+                                    {
+                                        'color': '#0f87ff',
+                                        'blocks': blocks
+                                    }
+                                ]
                             )
                         except SlackApiError as e:
                             bot.error(e)
@@ -1424,7 +1442,10 @@ def convinfo(**payload):
                         web_client.chat_update(
                             channel=channel_id,
                             ts=timestamp,
-                            blocks=blocks
+                            attachments=[{
+                                'color': '#0f87ff',
+                                'blocks': blocks
+                            }]
                         )
                     except SlackApiError as e:
                         bot.error(e)
