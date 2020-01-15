@@ -63,6 +63,10 @@ Assumes prefix is `~`
 
 ## Changelog:
 
+### Update 1.4.1:
+
+  - Update requirements.txt
+
 ### Update 1.4:
 
   - New Plugin Loading
