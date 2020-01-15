@@ -1300,7 +1300,7 @@ def listenercmd(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == config['prefix'] + '':
+            if cmd == config['prefix'] + 'listener':
                 if len(text_split) == 1:
                     print(Prefixes.warning + 'Missing Arguments! Read Help For Information')
                     bot.warning_count += 1

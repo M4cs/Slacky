@@ -1,3 +1,7 @@
+### Update 1.4.5:
+
+  - Fix `listener` command
+
 ### Update 1.4.4:
 
   - Update `help` command
