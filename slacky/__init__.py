@@ -29,6 +29,7 @@ class BotMetaData:
     def error(self, e):
         print(Prefixes.error + str(e))
         self.errors.append(str(e))
+        self.error_count += 1
         
     def get_uptime(self):
         now = datetime.datetime.now()

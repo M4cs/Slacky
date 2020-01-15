@@ -18,6 +18,10 @@ Discord for Support: https://discord.gg/JjZwJVF
 
 ### This README doesn't have all the info! I've written a readme with a bunch of info on the bot [here](https://github.com/M4cs/Slacky/wiki). Check it out for information on how to Install, Setup, and Customize Slacky!
 
+### Read how to run the bot in multiple workspaces [here](https://github.com/M4cs/Slacky/wiki/Multiple-Workspaces)
+
+### [View Changelog Here](https://github.com/M4cs/Slacky/blob/master/CHANGELOG.md)
+
 <p align="center">
   <center><h2 align="center">Slack Client</h2><br><p align="center"><img src="https://github.com/M4cs/Slacky/blob/master/slacky.gif"></p></center>
 </p>
@@ -34,6 +38,9 @@ Assumes prefix is `~`
 | Command   | Description                            | Usage                         |
 | :--: | :--: | :--: |
 | heartbeat | Check if bot is up or not              | ~heartbeat                    |
+| uinfo     | Get info about a user                  | ~uinfo @user                  |
+| winfo     | Get info about the current workspace   | ~winfo                        |
+| convinfo  | Get info about conversation/channel    | ~convinfo #chantag|optional   |
 | info      | Get info about the bot                 | ~info                         |
 | errors    | See all errors the bot has encountered | ~errors                       |
 | customrs  | Manage custom replies to messages      | [Read Wiki](https://github.com/M4cs/Slacky/wiki) |
@@ -54,53 +61,6 @@ Assumes prefix is `~`
 | listener      | Add or remove listeners                | ~listener add/delete phrase |
 | listener list | List all listener words                | ~listener list                  |
 | help      | Display this message                   | ~help                         |
-
-
-## Changelog:
-
-### Update 1.3:
-
-  - Adds `animations` and the `ani` command. Read Wiki for more info on animations.
-  - New bots error handling and `errors` command to display errors triggered
-
-### Update 1.2.2:
-
-  - Fix emoji handling in the `react` command
-
-### Update 1.2.1:
-
-  - Fix `customrs` command
-  - Regex sucks!
-
-### Update 1.2:
-
-  - Add `stats, space, ud` commands.
-  - Clean up more error handling
-  - Adds BotMetaData class for bot data like uptime, commands run, errors, etc
-
-### Update 1.1.4:
-
-  - Fix Custom Replies
-  - More Error Handling
-
-### Update 1.1.3:
-
-  - Better Error Handling
-  - Fix some broken commands
-
-### Update 1.1.2:
-
-  - Clean Up Code a Bit
-
-### Update 1.1.1:
-
-  - Adds Custom Config Creation/Selection Argument
-  - Error Handling Updates for Ctrl+C on Config Wizard
-
-### Update 1.1:
-
-  - Adds Custom Replies. Read the [Wiki](https://github.com/M4cs/Slacky/wiki) to learn how to use them.
-  - Bug fixes
 
 ## Contributing
 

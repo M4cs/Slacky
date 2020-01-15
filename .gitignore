@@ -3,3 +3,7 @@ config.json
 **/*.pyc
 *.json
 **/*wormy.txt
+**/*wormy2.txt
+Dockerfile.apptapp
+Dockerfile.reggora
+max.yml
