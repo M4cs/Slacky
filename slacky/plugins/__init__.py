@@ -15,6 +15,195 @@ import glob
 import os
 import ntpath
 
+def winfo(**payload):
+    print(Prefixes.event + 'Ran command: winfo')
+    bot.command_count += 1
+    data = payload['data']
+    channel_id = data['channel']
+    user = data.get('user')
+    timestamp = data.get('ts')
+    if check_user(user):
+        web_client = client
+        try:
+            t_info = web_client.team_info()
+        except SlackApiError as e:
+            bot.error(e)
+        try:
+            chan_count = 0
+            cursor = ""
+            while True:
+                c_info = web_client.conversations_list(limit=100,cursor=cursor)
+                for _ in c_info['channels']:
+                    chan_count += 1
+                if c_info.get('response_metadata').get("next_cursor"):
+                    cursor = c_info['response_metadata'].get("next_cursor")
+                    pass
+                else:
+                    break
+        except SlackApiError as e:
+            bot.error(e)
+        
+        if t_info and chan_count:
+            team = t_info['team']
+            blocks = [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": ":slack: *Team Info for {}:*".format(team['name'])
+                    },
+                    "accessory": {
+                        "type": "image",
+                        "image_url": team['icon']['image_230'],
+                        "alt_text": "Team Icon"
+                    }
+                },
+                {
+                    "type": "section",
+                    "fields": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "*ID:* {}".format(team['id'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*Domain:* {}.slack.com".format(team['domain'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*E-Mail Format:* email@{}".format(team.get('email_domain') if team.get('email_domain') else "N/A")
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*Enterprise Name:* {}".format(team.get('enterprise_name') if team.get('enterprise_name') else 'N/A')
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*Channel Count:* {}".format(chan_count)
+                        }
+                    ]
+                }
+            ]
+            try:
+                web_client.chat_update(
+                    channel=channel_id,
+                    ts=timestamp,
+                    blocks=blocks
+                )
+            except SlackApiError as e:
+                bot.error(e)
+        
+        
+
+def uinfo(**payload):
+    data = payload['data']
+    channel_id = data['channel']
+    user = data.get('user')
+    timestamp = data.get('ts')
+    if check_user(user):
+        web_client = client
+        text = data.get('text')
+        if text:
+            text_split = text.split(' ')
+            cmd = text_split[0]
+            if cmd == config['prefix'] + 'uinfo':
+                print(Prefixes.event + 'Ran command: uinfo')
+                bot.command_count += 1
+                if len(text_split) != 2:
+                    try:
+                        web_client.chat_update(
+                            channel=channel_id,
+                            ts=timestamp,
+                            text="Correct syntax is: `uinfo @user`"
+                        )
+                    except SlackApiError as e:
+                        bot.error(e)
+                else:
+                    try:
+                        web_client.chat_update(
+                            channel=channel_id,
+                            ts=timestamp,
+                            text="Getting User Info.."
+                        )
+                    except SlackApiError as e:
+                        bot.error(e)
+                    try:
+                        user_list = client.users_list()
+                    except SlackApiError as e:
+                        bot.error(e)
+                    if user_list:
+                        query = text_split[1].split('@')[1].split('>')[0]
+                        match = None
+                        for wuser in user_list['members']:
+                            if wuser['id'] == query:
+                                match = wuser
+                                break
+                        if match:
+                            blocks = [
+                                {
+                                    'type': 'section',
+                                    'text': {
+                                        'type': 'mrkdwn',
+                                        'text': ':slack: *User Information:*'
+                                    }
+                                },
+                                {
+                                    'type': 'section',
+                                    'text': {
+                                        'type': 'mrkdwn',
+                                        'text': '*Name:* {}\n*Status:* {}'.format(match['real_name'], match['profile'].get('status_text') if match['profile'].get('status_text') else 'N/A')
+                                    },
+                                    'accessory': {
+                                        'type': 'image',
+                                        'image_url': match['profile'].get('image_512'),
+                                        'alt_text': 'Profile Picture'
+                                    }
+                                },
+                                {
+                                    'type': 'section',
+                                    'fields': [
+                                        {
+                                            'type': 'mrkdwn',
+                                            'text': '*Username:* {}'.format(match['name'])
+                                        },
+                                        {
+                                            'type': 'mrkdwn',
+                                            'text': '*E-Mail:* {}'.format(match['profile']['email'])
+                                        },
+                                        {
+                                            'type': 'mrkdwn',
+                                            'text': '*Timezone:* {}'.format(match['tz_label'])
+                                        },
+                                        {
+                                            'type': 'mrkdwn',
+                                            'text': '*Phone:* {}'.format(match['profile'].get('phone') if match['profile'].get('phone') else 'N/A')
+                                        },
+                                        {
+                                            'type': 'mrkdwn',
+                                            'text': '*Title:* {}'.format(match['profile'].get('title') if match['profile'].get('title') else 'N/A')
+                                        }
+                                    ]
+                                }
+                            ]
+                            try:
+                                web_client.chat_update(
+                                    channel=channel_id,
+                                    ts=timestamp,
+                                    blocks=blocks
+                                )
+                            except SlackApiError as e:
+                                bot.error(e)
+                        
+                        else:
+                            try:
+                                web_client.chat_update(
+                                    channel=channel_id,
+                                    ts=timestamp,
+                                    text="No User Found."
+                                )
+                            except SlackApiError as e:
+                                bot.error(e)
+
 def errors(**payload):
     data = payload['data']
     channel_id = data['channel']
@@ -28,6 +217,7 @@ def errors(**payload):
             cmd = text_split[0]
             if cmd == config['prefix'] + 'errors':
                 print(Prefixes.event + 'Ran command: errors')
+                bot.command_count += 1
                 if len(bot.errors) > 0:
                     blocks = [
                         {
@@ -56,7 +246,7 @@ def errors(**payload):
                         )
                     except SlackApiError as e:
                         bot.error(e)
-                        bot.error_count += 1
+                        
                 else:
                     try:
                         web_client.chat_update(
@@ -66,7 +256,7 @@ def errors(**payload):
                         )
                     except SlackApiError as e:
                         bot.error(e)
-                        bot.error_count += 1
+                        
 
 def animations(**payload):
     data = payload['data']
@@ -79,7 +269,7 @@ def animations(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == config['prefix'] + 'ani':
+            if cmd == config['prefix'] + '':
                 print(Prefixes.event + 'Ran command: ani')
                 bot.command_count += 1
                 if len(text_split) < 2:
@@ -90,7 +280,7 @@ def animations(**payload):
                         )
                     except SlackApiError as e:
                         bot.error(e)
-                        bot.error_count += 1
+                        
                 else:
                     if len(text_split) == 2:
                         loop = 1
@@ -125,7 +315,7 @@ def animations(**payload):
                                     )
                                 except SlackApiError as e:
                                     bot.error(e)
-                                    bot.error_count += 1
+                                    
                                 time.sleep(float(interval))
                     else:
                         try:
@@ -136,7 +326,7 @@ def animations(**payload):
                             )
                         except SlackApiError as e:
                             bot.error(e)
-                            bot.error_count += 1
+                            
 
 def stats(**payload):
     data = payload['data']
@@ -225,7 +415,7 @@ def customrscmd(**payload):
                         bot.warning_count += 1
                     except SlackApiError as e:
                         bot.error(e)
-                        bot.error_count += 1
+                        
                 else:
                     action = text_split[1]
                     if action == "add":
@@ -239,7 +429,7 @@ def customrscmd(**payload):
                                 bot.warning_count += 1
                             except SlackApiError as e:
                                 bot.error(e)
-                                bot.error_count += 1
+                                
                         else:
                             ans = re.findall(r'["“‘\'](.*?)[\'’”"]',  text)
                             trigger = ans[0]
@@ -263,7 +453,7 @@ def customrscmd(**payload):
                                 )
                             except SlackApiError as e:
                                 bot.error(e)
-                                bot.error_count += 1
+                                
                     elif action == "delete":
                         if len(text_split) < 3:
                             try:
@@ -275,7 +465,7 @@ def customrscmd(**payload):
                                 bot.warning_count += 1
                             except SlackApiError as e:
                                 bot.error(e)
-                                bot.error_count += 1
+                                
                         else:
                             num = text_split[2]
                             customrs.delete(num)
@@ -287,7 +477,7 @@ def customrscmd(**payload):
                                 )
                             except SlackApiError as e:
                                 bot.error(e)
-                                bot.error_count += 1
+                                
                     elif action == "list":
                         blocks = []
                         if len(customrs.custom_replies) > 0:
@@ -307,7 +497,7 @@ def customrscmd(**payload):
                                 )
                             except SlackApiError as e:
                                 bot.error(e)
-                                bot.error_count += 1
+                                
                         else:
                             try:
                                 web_client.chat_update(
@@ -317,7 +507,7 @@ def customrscmd(**payload):
                                 )
                             except SlackApiError as e:
                                 bot.error(e)
-                                bot.error_count += 1
+                                
 
 def customrsd(**payload):
     data = payload['data']
@@ -340,7 +530,7 @@ def customrsd(**payload):
                                 )
                             except SlackApiError as e:
                                 bot.error(e)
-                                bot.error_count += 1
+                                
                     else:
                         if text.lower() == custom_reply['trigger'].lower():
                             try:
@@ -352,7 +542,7 @@ def customrsd(**payload):
                                 )
                             except SlackApiError as e:
                                 bot.error(e)
-                                bot.error_count += 1
+                                
     
 def ascii(**payload):
     data = payload['data']
@@ -377,7 +567,7 @@ def ascii(**payload):
                         )
                     except SlackApiError as e:
                         bot.error(e)
-                        bot.error_count += 1
+                        
                 else:
                     rest = ' '.join(text_split[1:])
                     f = Figlet(font='slant')
@@ -390,7 +580,7 @@ def ascii(**payload):
                         )
                     except SlackApiError as e:
                         bot.error(e)
-                        bot.error_count += 1
+                        
     
 def status(**payload):
     data = payload['data']
@@ -426,7 +616,7 @@ def status(**payload):
                         )
                     except SlackApiError as e:
                         bot.error(e)
-                        bot.error_count += 1
+                        
                         try:
                             web_client.chat_update(
                                 channel=channel_id,
@@ -435,7 +625,7 @@ def status(**payload):
                             )
                         except SlackApiError as e:
                             bot.error(e)
-                            bot.error_count += 1
+                            
 
 def setprefix(**payload):
     data = payload['data']
@@ -460,7 +650,7 @@ def setprefix(**payload):
                         )
                     except SlackApiError as e:
                         bot.error(e)
-                        bot.error_count += 1
+                        
                 else:
                     prefix = text_split[1]
                     config['prefix'] = prefix
@@ -478,7 +668,7 @@ def setprefix(**payload):
                         )
                     except SlackApiError as e:
                         bot.error(e)
-                        bot.error_count += 1
+                        
 
 def shelp(**payload):
     data = payload['data']
@@ -498,6 +688,9 @@ def shelp(**payload):
                     ['Command', 'Description', 'Usage'],
                     ['help', 'Display this message', '~help'],
                     ['heartbeat', 'Check if bot is up or not', '~heartbeat'],
+                    ['convinfo', 'Get information about convo', '~convinfo [channeltag:optional]'],
+                    ['uinfo', 'Get information about user', '~uinfo @user'],
+                    ['winfo', 'Get information about workspace', '~winfo'],
                     ['info', 'Get info about the bot', '~info'],
                     ['stats', 'Get stats about the bot running', '~stats'],
                     ['customrs', 'Set custom replies for messages.', 'Read Wiki'],
@@ -532,7 +725,7 @@ def shelp(**payload):
                     )
                 except SlackApiError as e:
                     bot.error(e)
-                    bot.error_count += 1
+                    
 
 def reactrand(**payload):
     data = payload['data']
@@ -555,7 +748,7 @@ def reactrand(**payload):
                     )
                 except SlackApiError as e:
                     bot.error(e)
-                    bot.error_count += 1
+                    
                 conv_info = client.conversations_history(channel=channel_id, count=1)
                 latest_ts = conv_info['messages'][0]['ts']
                 try:
@@ -566,7 +759,7 @@ def reactrand(**payload):
                     )
                 except SlackApiError as e:
                     bot.error(e)
-                    bot.error_count += 1
+                    
 
 def reactspam(**payload):
     data = payload['data']
@@ -589,7 +782,7 @@ def reactspam(**payload):
                     )
                 except SlackApiError as e:
                     bot.error(e)
-                    bot.error_count += 1
+                    
                 conv_info = client.conversations_history(channel=channel_id, count=1)
                 latest_ts = conv_info['messages'][0]['ts']
                 for _ in range(23):
@@ -601,7 +794,7 @@ def reactspam(**payload):
                         )
                     except SlackApiError as e:
                         bot.error(e)
-                        bot.error_count += 1
+                        
                         
 def ud(**payload):
     data = payload['data']
@@ -648,7 +841,7 @@ def ud(**payload):
                         )
                     except SlackApiError as e:
                         bot.error(e)
-                        bot.error_count += 1
+                        
                         
 def space(**payload):
     data = payload['data']
@@ -716,7 +909,7 @@ def sub_space(**payload):
                         )
                     except SlackApiError as e:
                         bot.error(e)
-                        bot.error_count += 1
+                        
                         
 def delete(**payload):
     data = payload['data']
@@ -755,7 +948,7 @@ def delete(**payload):
                             )
                         except SlackApiError as e:
                             bot.error(e)
-                            bot.error_count += 1
+                            
                         
 
 def shift(**payload):
@@ -798,7 +991,7 @@ def shift(**payload):
                         )
                     except SlackApiError as e:
                         bot.error(e)
-                        bot.error_count += 1
+                        
 
 def info(**payload):
     data = payload['data']
@@ -830,7 +1023,7 @@ To See Commands Run: {}help
                 )
             except SlackApiError as e:
                 bot.error(e)
-                bot.error_count += 1
+                
 
 def howdoicmd(**payload):
     data = payload['data']
@@ -861,7 +1054,7 @@ def howdoicmd(**payload):
                     )
                 except SlackApiError as e:
                     bot.error(e)
-                    bot.error_count += 1
+                    
                 parser = howdoi.get_parser()
                 args = vars(parser.parse_args(text_split[1:]))
                 output = howdoi.howdoi(args)
@@ -873,7 +1066,7 @@ def howdoicmd(**payload):
                     )
                 except SlackApiError as e:
                     bot.error(e)
-                    bot.error_count += 1
+                    
 
 def heartbeat(**payload):
     data = payload['data']
@@ -893,7 +1086,7 @@ def heartbeat(**payload):
                 )
             except SlackApiError as e:
                 bot.error(e)
-                bot.error_count += 1
+                
 
 def react(**payload):
     data = payload['data']
@@ -914,7 +1107,7 @@ def react(**payload):
                     )
                 except SlackApiError as e:
                     bot.error(e)
-                    bot.error_count += 1
+                    
                 emoji = text_split[1]
                 print(Prefixes.event + 'Ran Command: react')
                 bot.command_count += 1
@@ -929,13 +1122,11 @@ def react(**payload):
                     )
                 except SlackApiError as e:
                     bot.error(e)
-                    bot.error_count += 1
+                    
 
 def listenerd(**payload):
     data = payload['data']
-    user = data.get('user')
     channel_id = data['channel']
-    timestamp = data.get('ts')
     text = data.get('text')
     if text:
         if not config['prefix'] in text:
@@ -954,7 +1145,7 @@ def listenercmd(**payload):
         if text:
             text_split = text.split(' ')
             cmd = text_split[0]
-            if cmd == config['prefix'] + 'listener':
+            if cmd == config['prefix'] + '':
                 if len(text_split) == 1:
                     print(Prefixes.warning + 'Missing Arguments! Read Help For Information')
                     bot.warning_count += 1
@@ -973,7 +1164,7 @@ def listenercmd(**payload):
                             )
                         except SlackApiError as e:
                             bot.error(e)
-                            bot.error_count += 1
+                            
                     elif action == 'list':
                         bot.command_count += 1
                         listeners = ""
@@ -987,7 +1178,7 @@ def listenercmd(**payload):
                             )
                         except SlackApiError as e:
                             bot.error(e)
-                            bot.error_count += 1
+                            
                     elif action == 'delete':
                         listener.delete(phrase)
                         bot.command_count += 1
@@ -1000,7 +1191,7 @@ def listenercmd(**payload):
                             )
                         except SlackApiError as e:
                             bot.error(e)
-                            bot.error_count += 1
+                            
 
 def xkcd(**payload):
     data = payload['data']
@@ -1038,4 +1229,190 @@ def xkcd(**payload):
                     )
                 except SlackApiError as e:
                     bot.error(e)
-                    bot.error_count += 1
+
+def convinfo(**payload):
+    data = payload['data']
+    channel_id = data['channel']
+    user = data.get('user')
+    timestamp = data.get('ts')
+    if check_user(user):
+        web_client = client
+        text = data.get('text')
+        if text:
+            text_split = text.split(' ')
+            cmd = text_split[0]
+            if cmd == config['prefix'] + 'convinfo':
+                print(Prefixes.event + 'Ran command: convinfo')
+                try:
+                    web_client.chat_update(
+                        channel=channel_id,
+                        ts=timestamp,
+                        text="This may take a while..."
+                    )
+                except SlackApiError as e:
+                    bot.error(e)
+                if len(text_split) == 2:
+                    if '#' in text_split[1]:
+                        fsplit = text_split[1].split('|')[0].split('#')[1]
+                        nsplit = text_split[1].split('|')[1].strip('>')
+                        print(fsplit)
+                        bot.command_count += 1
+                        messages = []
+                        cursor = ""
+                        while True:
+                            try:
+                                hist = client.conversations_history(channel=fsplit, limit=100, cursor=cursor)
+                                for i in hist['messages']:
+                                    messages.append(i)
+                                if hist['has_more']:
+                                    print('Has More')
+                                    cursor = hist['response_metadata']['next_cursor']
+                                    pass
+                                else:
+                                    break
+                            except SlackApiError as e:
+                                bot.error(e)
+                        lols = 0
+                        lmaos = 0
+                        shits = 0
+                        fucks = 0
+                        msgs = 0
+                        for message in messages:
+                            msgs += 1
+                            if str('lol') in message['text']:
+                                lols += 1
+                            elif str('lmao') in message['text']:
+                                lmaos += 1
+                            elif str('shit') in message['text']:
+                                shits += 1
+                            elif str('fuck') in message['text']:
+                                fucks += 1
+                            else:
+                                pass
+                        blocks = [
+                            {
+                                "type": "section",
+                                "text": {
+                                    "type": "mrkdwn",
+                                    "text": ":slack: *Conversation History for  {}:*".format(nsplit.capitalize())
+                                }
+                            },
+                            {
+                                'type': 'section',
+                                'fields': [
+                                    {
+                                        'type': 'mrkdwn',
+                                        'text': '*# of LOLs:* {}'.format(lols)
+                                    },
+                                    {
+                                        'type': 'mrkdwn',
+                                        'text': '*# of LMAOs:* {}'.format(lmaos)
+                                    },
+                                    {
+                                        'type': 'mrkdwn',
+                                        'text': '*# of S--ts:* {}'.format(shits)
+                                    },
+                                    {
+                                        'type': 'mrkdwn',
+                                        'text': '*# of F--ks:* {}'.format(fucks)
+                                    },
+                                    {
+                                        'type': 'mrkdwn',
+                                        'text': '*Total Messages:* {}'.format(msgs)
+                                    }
+                                ]
+                            }
+                        ]
+                        try:
+                            web_client.chat_update(
+                                channel=channel_id,
+                                ts=timestamp,
+                                blocks=blocks
+                            )
+                        except SlackApiError as e:
+                            bot.error(e)
+                    else:
+                        try:
+                            web_client.chat_update(
+                                channel=channel_id,
+                                ts=timestamp,
+                                text='Error. Bad Channel!'
+                            )
+                        except SlackApiError as e:
+                            bot.error(e)
+                else:
+                    bot.command_count += 1
+                    messages = []
+                    cursor = ""
+                    while True:
+                        try:
+                            hist = client.conversations_history(channel=channel_id, limit=100, cursor=cursor)
+                            for i in hist['messages']:
+                                messages.append(i)
+                            if hist['has_more']:
+                                print('Has More')
+                                cursor = hist['response_metadata']['next_cursor']
+                                pass
+                            else:
+                                break
+                        except SlackApiError as e:
+                            bot.error(e)
+                    lols = 0
+                    lmaos = 0
+                    shits = 0
+                    fucks = 0
+                    msgs = 0
+                    for message in messages:
+                        msgs += 1
+                        if str('lol') in message['text']:
+                            lols += 1
+                        elif str('lmao') in message['text']:
+                            lmaos += 1
+                        elif str('shit') in message['text']:
+                            shits += 1
+                        elif str('fuck') in message['text']:
+                            fucks += 1
+                        else:
+                            pass
+                    blocks = [
+                        {
+                            "type": "section",
+                            "text": {
+                                "type": "mrkdwn",
+                                "text": ":slack: *Conversation History:*"
+                            }
+                        },
+                        {
+                            'type': 'section',
+                            'fields': [
+                                {
+                                    'type': 'mrkdwn',
+                                    'text': '*# of LOLs:* {}'.format(lols)
+                                },
+                                {
+                                    'type': 'mrkdwn',
+                                    'text': '*# of LMAOs:* {}'.format(lmaos)
+                                },
+                                {
+                                    'type': 'mrkdwn',
+                                    'text': '*# of S--ts:* {}'.format(shits)
+                                },
+                                {
+                                    'type': 'mrkdwn',
+                                    'text': '*# of F--ks:* {}'.format(fucks)
+                                },
+                                {
+                                    'type': 'mrkdwn',
+                                    'text': '*Total Messages:* {}'.format(msgs)
+                                }
+                            ]
+                        }
+                    ]
+                    try:
+                        web_client.chat_update(
+                            channel=channel_id,
+                            ts=timestamp,
+                            blocks=blocks
+                        )
+                    except SlackApiError as e:
+                        bot.error(e)

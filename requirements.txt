@@ -5,3 +5,4 @@ howdoi
 httpx
 slackclient
 nest_asyncio
+oxforddictionaries

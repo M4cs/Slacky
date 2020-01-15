@@ -36,6 +36,9 @@ Assumes prefix is `~`
 | Command   | Description                            | Usage                         |
 | :--: | :--: | :--: |
 | heartbeat | Check if bot is up or not              | ~heartbeat                    |
+| uinfo     | Get info about a user                  | ~uinfo @user                  |
+| winfo     | Get info about the current workspace   | ~winfo                        |
+| convinfo  | Get info about conversation/channel    | ~convinfo #chantag|optional   |
 | info      | Get info about the bot                 | ~info                         |
 | errors    | See all errors the bot has encountered | ~errors                       |
 | customrs  | Manage custom replies to messages      | [Read Wiki](https://github.com/M4cs/Slacky/wiki) |
@@ -59,6 +62,12 @@ Assumes prefix is `~`
 
 
 ## Changelog:
+
+### Update 1.4:
+
+  - New Plugin Loading
+  - Error Handling
+  - Adds `winfo`, `convinfo`, and `uinfo` commands
 
 ### Update 1.3.2:
 
