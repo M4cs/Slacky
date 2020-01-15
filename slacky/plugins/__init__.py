@@ -16,82 +16,94 @@ import os
 import ntpath
 
 def winfo(**payload):
-    print(Prefixes.event + 'Ran command: winfo')
-    bot.command_count += 1
     data = payload['data']
     channel_id = data['channel']
     user = data.get('user')
     timestamp = data.get('ts')
     if check_user(user):
         web_client = client
-        try:
-            t_info = web_client.team_info()
-        except SlackApiError as e:
-            bot.error(e)
-        try:
-            chan_count = 0
-            cursor = ""
-            while True:
-                c_info = web_client.conversations_list(limit=100,cursor=cursor)
-                for _ in c_info['channels']:
-                    chan_count += 1
-                if c_info.get('response_metadata').get("next_cursor"):
-                    cursor = c_info['response_metadata'].get("next_cursor")
-                    pass
-                else:
-                    break
-        except SlackApiError as e:
-            bot.error(e)
-        
-        if t_info and chan_count:
-            team = t_info['team']
-            blocks = [
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": ":slack: *Team Info for {}:*".format(team['name'])
-                    },
-                    "accessory": {
-                        "type": "image",
-                        "image_url": team['icon']['image_230'],
-                        "alt_text": "Team Icon"
-                    }
-                },
-                {
-                    "type": "section",
-                    "fields": [
+        text = data.get('text')
+        if text:
+            text_split = text.split(' ')
+            cmd = text_split[0]
+            if cmd == config['prefix'] + 'winfo':
+                print(Prefixes.event + 'Ran command: winfo')
+                try:
+                    web_client.chat_update(
+                        channel=channel_id,
+                        ts=timestamp,
+                        text="Getting Workspace Info.."
+                    )
+                except SlackApiError as e:
+                    bot.error(e)
+                try:
+                    t_info = web_client.team_info()
+                except SlackApiError as e:
+                    bot.error(e)
+                try:
+                    chan_count = 0
+                    cursor = ""
+                    while True:
+                        c_info = web_client.conversations_list(limit=100,cursor=cursor)
+                        for _ in c_info['channels']:
+                            chan_count += 1
+                        if c_info.get('response_metadata').get("next_cursor"):
+                            cursor = c_info['response_metadata'].get("next_cursor")
+                            pass
+                        else:
+                            break
+                except SlackApiError as e:
+                    bot.error(e)
+                
+                if t_info and chan_count:
+                    team = t_info['team']
+                    blocks = [
                         {
-                            "type": "mrkdwn",
-                            "text": "*ID:* {}".format(team['id'])
+                            "type": "section",
+                            "text": {
+                                "type": "mrkdwn",
+                                "text": ":slack: *Team Info for {}:*".format(team['name'])
+                            },
+                            "accessory": {
+                                "type": "image",
+                                "image_url": team['icon']['image_230'],
+                                "alt_text": "Team Icon"
+                            }
                         },
                         {
-                            "type": "mrkdwn",
-                            "text": "*Domain:* {}.slack.com".format(team['domain'])
-                        },
-                        {
-                            "type": "mrkdwn",
-                            "text": "*E-Mail Format:* email@{}".format(team.get('email_domain') if team.get('email_domain') else "N/A")
-                        },
-                        {
-                            "type": "mrkdwn",
-                            "text": "*Enterprise Name:* {}".format(team.get('enterprise_name') if team.get('enterprise_name') else 'N/A')
-                        },
-                        {
-                            "type": "mrkdwn",
-                            "text": "*Channel Count:* {}".format(chan_count)
+                            "type": "section",
+                            "fields": [
+                                {
+                                    "type": "mrkdwn",
+                                    "text": "*ID:* {}".format(team['id'])
+                                },
+                                {
+                                    "type": "mrkdwn",
+                                    "text": "*Domain:* {}.slack.com".format(team['domain'])
+                                },
+                                {
+                                    "type": "mrkdwn",
+                                    "text": "*E-Mail Format:* email@{}".format(team.get('email_domain') if team.get('email_domain') else "N/A")
+                                },
+                                {
+                                    "type": "mrkdwn",
+                                    "text": "*Enterprise Name:* {}".format(team.get('enterprise_name') if team.get('enterprise_name') else 'N/A')
+                                },
+                                {
+                                    "type": "mrkdwn",
+                                    "text": "*Channel Count:* {}".format(chan_count)
+                                }
+                            ]
                         }
                     ]
-                }
-            ]
-            try:
-                web_client.chat_update(
-                    channel=channel_id,
-                    ts=timestamp,
-                    blocks=blocks
-                )
-            except SlackApiError as e:
-                bot.error(e)
+                    try:
+                        web_client.chat_update(
+                            channel=channel_id,
+                            ts=timestamp,
+                            blocks=blocks
+                        )
+                    except SlackApiError as e:
+                        bot.error(e)
         
         
 

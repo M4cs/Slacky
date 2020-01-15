@@ -63,6 +63,10 @@ Assumes prefix is `~`
 
 ## Changelog:
 
+### Update 1.4.2:
+
+  - Fix slowing bug due to hitting `winfo` each time
+
 ### Update 1.4.1:
 
   - Update requirements.txt
