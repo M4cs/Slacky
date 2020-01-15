@@ -1,3 +1,7 @@
+### Update 1.4.6:
+
+  - Fix `winfo` formatting
+
 ### Update 1.4.5:
 
   - Fix `listener` command

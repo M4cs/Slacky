@@ -100,7 +100,12 @@ def winfo(**payload):
                         web_client.chat_update(
                             channel=channel_id,
                             ts=timestamp,
-                            blocks=blocks
+                            attachments=[
+                                {
+                                    'color': '#0f87ff',
+                                    'blocks': blocks
+                                }
+                            ]
                         )
                     except SlackApiError as e:
                         bot.error(e)
