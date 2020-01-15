@@ -43,6 +43,7 @@ Assumes prefix is `~`
 | convinfo  | Get info about conversation/channel    | ~convinfo #chantag|optional   |
 | info      | Get info about the bot                 | ~info                         |
 | errors    | See all errors the bot has encountered | ~errors                       |
+| msgstatus | Enable/Disable random status emoji on msg | ~msgstatus                 |
 | customrs  | Manage custom replies to messages      | [Read Wiki](https://github.com/M4cs/Slacky/wiki) |
 | stats     | Get info about the bot running         | ~stats                        |
 | ascii     | Generate ASCII art from a phrase       | ~ascii msg |

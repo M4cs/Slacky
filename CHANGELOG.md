@@ -1,3 +1,10 @@
+### Update 1.5.1:
+
+  - Merges @TotallyChase's PR
+  - Performance and Optimization Boost
+  - Plugin loading refactor
+  - Adds `msgstatus` command
+
 ### Update 1.5:
 
   - Huge refactor with `cmd_setup` function
