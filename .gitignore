@@ -4,5 +4,6 @@ config.json
 *.json
 **/*wormy.txt
 **/*wormy2.txt
-Dockerfile.*
+Dockerfile.apptapp
+Dockerfile.reggora
 max.yml

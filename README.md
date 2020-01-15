@@ -63,6 +63,11 @@ Assumes prefix is `~`
 
 ## Changelog:
 
+### Update 1.4.4:
+
+  - Update `help` command
+  - Better Error Handling on Custom Replies
+
 ### Update 1.4.3:
 
   - Uses attachments to make replies prettier

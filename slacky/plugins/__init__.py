@@ -487,16 +487,25 @@ def customrscmd(**payload):
                                 
                         else:
                             num = text_split[2]
-                            customrs.delete(num)
                             try:
-                                web_client.chat_update(
-                                    channel=channel_id,
-                                    text="Deleted Custom Reply.",
-                                    ts=timestamp
-                                )
-                            except SlackApiError as e:
-                                bot.error(e)
-                                
+                                customrs.delete(num)
+                                try:
+                                    web_client.chat_update(
+                                        channel=channel_id,
+                                        text="Deleted Custom Reply.",
+                                        ts=timestamp
+                                    )
+                                except SlackApiError as e:
+                                    bot.error(e)
+                            except IndexError as e:
+                                try:
+                                    web_client.chat_update(
+                                        channel=channel_id,
+                                        text="No Custom Reply with That ID",
+                                        ts=timestamp
+                                    )
+                                except SlackApiError as e:
+                                    bot.error(e)             
                     elif action == "list":
                         blocks = []
                         if len(customrs.custom_replies) > 0:
@@ -703,43 +712,165 @@ def shelp(**payload):
             if cmd == config['prefix'] + 'help':
                 print(Prefixes.event + 'Ran Command: help')
                 bot.command_count += 1
-                table = [
-                    ['Command', 'Description', 'Usage'],
-                    ['help', 'Display this message', '~help'],
-                    ['heartbeat', 'Check if bot is up or not', '~heartbeat'],
-                    ['convinfo', 'Get information about convo', '~convinfo [channeltag:optional]'],
-                    ['uinfo', 'Get information about user', '~uinfo @user'],
-                    ['winfo', 'Get information about workspace', '~winfo'],
-                    ['info', 'Get info about the bot', '~info'],
-                    ['stats', 'Get stats about the bot running', '~stats'],
-                    ['customrs', 'Set custom replies for messages.', 'Read Wiki'],
-                    ['ascii', 'Generate ASCII Art from Text', '~ascii <phrase>'],
-                    ['ani', 'Run animation from animations folder', '~ani <name of txt file>'],
-                    ['space', 'Add spaces between characters', '~space <phrase>'],
-                    ['shift', 'CrEaTe ShIfT tExT lIkE tHiS', '~shift <phrase>'],
-                    ['subspace', 'Replace spaces with emojis', '~subspace <:emoji:> <msg>'],
-                    ['setstauts', 'Set status of your profile', '~setstatus <:emoji:> <status>'],
-                    ['setprefix', 'Set prefix for commands (Default ~)', '~setprefix <prefix>'],
-                    ['xkcd', 'Get Daily xkcd comic', '~xkcd'],
-                    ['react', 'React to last sent message', '~react :emoji:'],
-                    ['reactrand', 'React to with random emoji', '~reactrand'],
-                    ['reactspam', 'Spam 23 Reactions (Notification Spam)', '~randspam'],
-                    ['delete', 'Delete # of msgs', '~delete msg_count'],
-                    ['howdoi', 'Find code snippets from stack overflow', '~howdoi loop over list python'],
-                    ['listener', 'Add or remove listeners', '~listener <add/delete> <phrase>'],
-                    ['listener list', 'List all listener words', '~listener list'],
+                attachments = [
+                    {
+                        "color": "#d94c63",
+                        "blocks": [
+                            {
+                                "type": "section",
+                                "text": {
+                                    "type": "mrkdwn",
+                                    "text": "*General Commands:*"
+                                },
+                                "fields": [
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*ascii*\nConvert String To ASCII Art\n`~ascii <phrase>`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*ani*\nPlay Animation\n`~ani <name> [loops]`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*delete*\nDelete Last X Messages\n`~delete <num of msgs>`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*howdoi*\nGet Code Snippet From Stack Overflow\n`~howdoi <query>`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*react*\nReact to Last Message\n`~react <emoji>`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*reactrand*\nReact to Last Message with Random Emoji\n`~reactrand`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*reactspam*\nSpam Last Message with Reactions\n`~reactspam`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*setstatus*\nSet Your Slack Status\n`~setstatus <emoji> <status>`\n"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "color": "#b34cd9",
+                        "blocks": [
+                            {
+                                "type": "section",
+                                "text": {
+                                    "type": "mrkdwn",
+                                    "text": "*Custom Reply Commands:*"
+                                },
+                                "fields": [
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*customrs add*\nAdd Custom Reply\n`~customrs add \"<trigger>\" \"<reply>\" [strict|optional]`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*customrs delete*\nDelete Custom Reply\n`~customrs delete <CR ID>`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*customrs list*\nList Custom Replies\n`~customrs list`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*listener add*\nAdd a Listener\n`~listener add <trigger>`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*listener delete*\nDelete a Listener\n`~listener delete <trigger>`\n"
+                                    },
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "color": "#4cd992",
+                        "blocks": [
+                            {
+                                "type": "section",
+                                "text": {
+                                    "type": "mrkdwn",
+                                    "text": "*Fun Commands:*"
+                                },
+                                "fields": [
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*space*\nAdd a Space In Between Characters\n`~space <phrase>`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*subspace*\nSubstitute Every Space with an Emoji\n`~subspace <emoji>`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*shift*\nGeNeRaTe ShIfT tExT\n`~shift <phrase>`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*xkcd*\nGet The Daily xkcd Comic\n`~xkcd`\n"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "color": "#0f87ff",
+                        "blocks": [
+                            {
+                                "type": "section",
+                                "text": {
+                                    "type": "mrkdwn",
+                                    "text": "*Info Commands:*"
+                                },
+                                "fields": [
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*help*\nDisplay Help Menu\n`~help`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*info*\nDisplay Info About Bot\n`~info`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*convinfo*\nGet Info About Chat/Channel\n`~convinfo [#channel]`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*uinfo*\nGet Info About User\n`~uinfo @user`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*winfo*\nGet Info About Workspace\n`~winfo`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*stats*\nGet Stats About Bot\n`~stats`\n"
+                                    },
+                                    {
+                                        "type": "mrkdwn",
+                                        "text": "*listener list*\nList All Listeners\n`~listener list`\n"
+                                    }
+                                ]
+                            },
+                        ]
+                    }
                 ]
-                ttable = DoubleTable(table)
-                str_table = str(ttable.table)
-                new_tb = str_table.split('\n')
-                str_table = ""
-                for line in new_tb:
-                    if not "═" in line:
-                        str_table += str(line + '\n')
                 try:
                     web_client.chat_update(
                         channel=channel_id,
-                        text="```{}```".format(str(str_table)),
+                        text="",
+                        attachments=attachments,
                         ts=timestamp
                     )
                 except SlackApiError as e:
@@ -1289,7 +1420,6 @@ def convinfo(**payload):
                                 for i in hist['messages']:
                                     messages.append(i)
                                 if hist['has_more']:
-                                    print('Has More')
                                     cursor = hist['response_metadata']['next_cursor']
                                     pass
                                 else:
@@ -1380,7 +1510,6 @@ def convinfo(**payload):
                             for i in hist['messages']:
                                 messages.append(i)
                             if hist['has_more']:
-                                print('Has More')
                                 cursor = hist['response_metadata']['next_cursor']
                                 pass
                             else:
