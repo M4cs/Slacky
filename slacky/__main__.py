@@ -3,117 +3,59 @@ from slacky.plugins import *
 from time import sleep
 import slack
 import httpx
+import re
 
 print(Prefixes.event + 'Loading Plugins', end='\r')
 
-@slack.RTMClient.run_on(event='message')
-def _heartbeat(**payload):
-    return heartbeat(**payload)
+commands = {
+        'heartbeat': lambda **payload: heartbeat(),
+        'stats' : lambda **payload: stats,
+        'setprefix': lambda **payload: setprefix,
+        'space' : lambda **payload: space,
+        'winfo': lambda **payload: winfo,
+        'uinfo' : lambda **payload: uinfo,
+        'convinfo': lambda **payload: convinfo,
+        'ani' : lambda **payload: animations,
+        'errors': lambda **payload: errors,
+        'ud' : lambda **payload: ud,
+        'help': lambda **payload: shelp,
+        'delete' : lambda **payload: delete,
+        'ascii': lambda **payload: ascii,
+        'reactrand' : lambda **payload: reactrand,
+        'reactspam': lambda **payload: reactspam,
+        'customrs' : lambda **payload: customrscmd,
+        'howdoi': lambda **payload: howdoicmd,
+        'subspace' : lambda **payload: sub_space,
+        'xkcd': lambda **payload: xkcd,
+        'react' : lambda **payload: react,
+        'info': lambda **payload: info,
+        'shift' : lambda **payload: shift,
+        'status': lambda **payload: status,
+        'listener': lambda **payload: listenercmd,
+    }
 
 @slack.RTMClient.run_on(event='message')
-def _stats(**payload):
-    return stats(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _setprefix(**payload):
-    return setprefix(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _space(**payload):
-    return space(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _winfo(**payload):
-    return winfo(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _uinfo(**payload):
-    return uinfo(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _convinfo(**payload):
-    return convinfo(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _animations(**payload):
-    return animations(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _errors(**payload):
-    return errors(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _ud(**payload):
-    return ud(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _help(**payload):
-    return shelp(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _delete(**payload):
-    return delete(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _ascii(**payload):
-    return ascii(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _reactrand(**payload):
-    return reactrand(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _reactspam(**payload):
-    return reactspam(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _customrscmd(**payload):
-    return customrscmd(**payload)
+def _cmdcheck(**payload):
+    prefix = config['prefix']
+    text = payload['data'].get('text')
+    if not text:
+        return "no text"
+    cmd = re.search(r'{}(.*?) |{}(.*?)$'.format(prefix, prefix), text)
+    if not cmd:
+        return "no command"
+    cmd = cmd.group(1) if cmd.group(1) else cmd.group(2)
+    func = commands.get(cmd, None)()
+    if func is not None:
+        func(**payload)
+    return "done"
 
 @slack.RTMClient.run_on(event='message')
 def _customrsd(**payload):
     return customrsd(**payload)
 
 @slack.RTMClient.run_on(event='message')
-def _howdoi(**payload):
-    return howdoicmd(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _subspace(**payload):
-    return sub_space(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _xkcd(**payload):
-    return xkcd(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _react(**payload):
-    return react(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _info(**payload):
-    return info(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _shift(**payload):
-    return shift(**payload)
-
-@slack.RTMClient.run_on(event='message')
 def _listenercmd(**payload):
-    return listenercmd(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _listenerd(**payload):
     return listenerd(**payload)
-
-@slack.RTMClient.run_on(event='message')
-def _status(**payload):
-    return status(**payload)
-
-# Load Custom Plugins Here
-@slack.RTMClient.run_on(event='message')
-def _example(**payload):
-    return custom_example(**payload)
 
 def run_client(rtm):
     rtm.start()
