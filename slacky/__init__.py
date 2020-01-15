@@ -83,9 +83,40 @@ class CustomReplies:
             json.dump(obj, file, indent=4)
             file.truncate()
 
+class CustomBinds:
+    def __init__(self, config):
+        try:
+            self.binds = config['binds']
+        except KeyError:
+            self.binds = []
+
+    def add(self, bind):
+        with open('config.json', 'r+') as file:
+            obj = json.load(file)
+            match = False
+            for bind_info in self.binds:
+                if bind_info['bind_key'] == bind['bind_key']:
+                    bind_info['paste'] = bind['paste']
+                    match = True
+            if not match:
+                self.binds.append(bind)
+            obj['binds'] = self.binds
+            file.seek(0)
+            json.dump(obj, file, indent=4)
+            file.truncate()
+    
+    def delete(self, num):
+        del self.binds[int(num)]
+        with open('config.json', 'r+') as file:
+            obj = json.load(file)
+            obj['binds'] = self.binds
+            file.seek(0)
+            json.dump(obj, file, indent=4)
+            file.truncate()
+
 class Listeners:
     def __init__(self, config):
-        self.listeners = config['listeners']
+        self.listeners = config['listeners'] if config['listeners'] else []
 
     def add(self, phrase):
         self.listeners.append(phrase)
@@ -170,6 +201,7 @@ try:
     print(Prefixes.event + 'Attempting to Authenticate with Slack', end='\r')
     listener = Listeners(config)
     customrs = CustomReplies(config)
+    custombinds = CustomBinds(config)
     client = authenticate(config)
     if not client:
         print(Prefixes.error + 'Could Not Authenticate with Slack! Please check your config and token!')

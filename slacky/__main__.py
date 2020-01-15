@@ -115,6 +115,14 @@ def _status(**payload):
 def _example(**payload):
     return custom_example(**payload)
 
+@slack.RTMClient.run_on(event='message')
+def _bind(**payload):
+    return bindmd(**payload)
+
+@slack.RTMClient.run_on(event='message')
+def _paste(**payload):
+    return paste(**payload)
+
 def run_client(rtm):
     rtm.start()
 
