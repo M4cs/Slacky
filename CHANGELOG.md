@@ -1,6 +1,7 @@
 ### Update 1.5.2:
 
   - Fixes `heartbeat` command and adds `ping` command
+  - New `help` command and subcommands
 
 ### Update 1.5.1:
 
