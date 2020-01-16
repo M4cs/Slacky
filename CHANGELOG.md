@@ -1,4 +1,4 @@
-### Update 1.5.6:
+### Update 1.6:
 
   - Adds `deepfry` command from forked [deeppyer](https://github.com/Ovyerus/deeppyer)
   - `deepfry` is a custom command and must be loaded in `plugins/__init__.py` manually. Requires `OpenCV 4`.
