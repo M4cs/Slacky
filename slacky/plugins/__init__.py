@@ -568,7 +568,7 @@ def customrsd(**payload):
             if not config['prefix'] in text:
                 for custom_reply in customrs.custom_replies:
                     if not custom_reply['is_strict']:
-                        if text.lower() in custom_reply['trigger'].lower():
+                        if custom_reply['trigger'].lower() in text.lower():
                             try:
                                 client.chat_postMessage(
                                     channel=channel_id,
