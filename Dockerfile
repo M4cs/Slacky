@@ -8,6 +8,8 @@ ADD requirements.txt /usr/src/app/requirements.txt
 
 RUN pip install -r requirements.txt
 
+RUN apt-get install python-opencv
+
 ADD . /usr/src/app
 
 CMD python -m slacky
