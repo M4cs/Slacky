@@ -34,6 +34,21 @@ def cmd_setup(command, **payload):
             return None, None, None, None, None, None, None
     else:
         return None, None, None, None, None, None, None
+    
+def ping(**payload):
+    data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('ping', **payload)
+    if data:
+        real_ts = float(float(timestamp) - 3)
+        now = float(time.time())
+        relay = int(float(now - real_ts) * 1000)
+        try:
+            web_client.chat_update(
+                channel=channel_id,
+                ts=timestamp,
+                text='`Pong! Took: {}ms`'.format(relay)
+            )
+        except SlackApiError as e:
+            bot.error(e)
 
 def msgstatus(**payload):
     data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('msgstatus', **payload)
@@ -58,6 +73,7 @@ def msgstatus(**payload):
                 )
             except SlackApiError as e:
                 bot.error(e)
+                
 def winfo(**payload):
     data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('winfo', **payload)
     if data:
@@ -352,6 +368,9 @@ def stats(**payload):
     data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('stats', **payload)
     if data:
         workspace = client.team_info()['team']['name']
+        real_ts = float(float(timestamp) - 3)
+        now = float(time.time())
+        relay = int(float(now - real_ts) * 1000)
         blocks = [
             {
                 "type": "section",
@@ -386,6 +405,10 @@ def stats(**payload):
                     {
                         "type": "mrkdwn",
                         "text": ":eyes: *Msgs Parsed*: *{}*".format(bot.message_count)
+                    },
+                    {
+                        "type": "mrkdwn",
+                        "text": "*Ping:* {}".format(relay)
                     }
                 ]
             }
@@ -653,172 +676,243 @@ def shelp(**payload):
     if data:
         attachments = [
             {
-                "color": "#d94c63",
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "*General Commands:*"
-                        },
-                        "fields": [
-                            {
-                                "type": "mrkdwn",
-                                "text": "*ascii*\nConvert String To ASCII Art\n`~ascii <phrase>`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*ani*\nPlay Animation\n`~ani <name> [loops]`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*delete*\nDelete Last X Messages\n`~delete <num of msgs>`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*howdoi*\nGet Code Snippet From Stack Overflow\n`~howdoi <query>`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*react*\nReact to Last Message\n`~react <emoji>`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*reactrand*\nReact to Last Message with Random Emoji\n`~reactrand`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*reactspam*\nSpam Last Message with Reactions\n`~reactspam`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*setstatus*\nSet Your Slack Status\n`~setstatus <emoji> <status>`\n"
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "color": "#b34cd9",
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "*Custom Reply Commands:*"
-                        },
-                        "fields": [
-                            {
-                                "type": "mrkdwn",
-                                "text": "*customrs add*\nAdd Custom Reply\n`~customrs add \"<trigger>\" \"<reply>\" [strict|optional]`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*customrs delete*\nDelete Custom Reply\n`~customrs delete <CR ID>`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*customrs list*\nList Custom Replies\n`~customrs list`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*listener add*\nAdd a Listener\n`~listener add <trigger>`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*listener delete*\nDelete a Listener\n`~listener delete <trigger>`\n"
-                            },
-                        ]
-                    }
-                ]
-            },
-            {
-                "color": "#4cd992",
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "*Fun Commands:*"
-                        },
-                        "fields": [
-                            {
-                                "type": "mrkdwn",
-                                "text": "*space*\nAdd a Space In Between Characters\n`~space <phrase>`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*msgstatus*\nEnable/Disable Random Emoji in Status on Msgs\n`~msgstatus`"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*subspace*\nSubstitute Every Space with an Emoji\n`~subspace <emoji>`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*shift*\nGeNeRaTe ShIfT tExT\n`~shift <phrase>`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*xkcd*\nGet The Daily xkcd Comic\n`~xkcd`\n"
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
                 "color": "#0f87ff",
                 "blocks": [
                     {
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
-                            "text": "*Info Commands:*"
+                            "text": "*Slacky Help Menu:*"
                         },
                         "fields": [
                             {
                                 "type": "mrkdwn",
-                                "text": "*help*\nDisplay Help Menu\n`~help`\n"
+                                "text": "*General*\n`{}help general`\n".format(config['prefix'])
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": "*info*\nDisplay Info About Bot\n`~info`\n"
+                                "text": "*Fun*\n`{}help fun`\n".format(config['prefix'])
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": "*convinfo*\nGet Info About Chat/Channel\n`~convinfo [#channel]`\n"
+                                "text": "*Info*\n`{}help info`\n".format(config['prefix'])
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": "*uinfo*\nGet Info About User\n`~uinfo @user`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*winfo*\nGet Info About Workspace\n`~winfo`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*stats*\nGet Stats About Bot\n`~stats`\n"
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*listener list*\nList All Listeners\n`~listener list`\n"
+                                "text": "*Custom Replies*\n`{}help cr`\n".format(config['prefix'])
                             }
                         ]
-                    },
+                    }
                 ]
-            }
-        ]
-        try:
-            web_client.chat_update(
-                channel=channel_id,
-                text="",
-                attachments=attachments,
-                ts=timestamp
-            )
-        except SlackApiError as e:
-            bot.error(e)
-                    
+            }]
+        attachments_general = [{
+            "color": "#d94c63",
+            "blocks": [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*General Commands:*"
+                    },
+                    "fields": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "*ascii*\nConvert String To ASCII Art\n`{}ascii <phrase>`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*ani*\nPlay Animation\n`{}ani <name> [loops]`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*delete*\nDelete Last X Messages\n`{}delete <num of msgs>`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*howdoi*\nGet Code Snippet From Stack Overflow\n`{}howdoi <query>`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*react*\nReact to Last Message\n`{}react <emoji>`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*reactrand*\nReact to Last Message with Random Emoji\n`{}reactrand`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*reactspam*\nSpam Last Message with Reactions\n`{}reactspam`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*setstatus*\nSet Your Slack Status\n`{}setstatus <emoji> <status>`\n".format(config['prefix'])
+                        }
+                    ]
+                }
+            ]
+        }]
+        
+        attachments_crs = [{
+            "color": "#b34cd9",
+            "blocks": [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Custom Reply Commands:*"
+                    },
+                    "fields": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "*customrs add*\nAdd Custom Reply\n`{}customrs add \"<trigger>\" \"<reply>\" [strict|optional]`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*customrs delete*\nDelete Custom Reply\n`{}customrs delete <CR ID>`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*customrs list*\nList Custom Replies\n`{}customrs list`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*listener add*\nAdd a Listener\n`{}listener add <trigger>`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*listener delete*\nDelete a Listener\n`{}listener delete <trigger>`\n".format(config['prefix'])
+                        },
+                    ]
+                }
+            ]
+        }]
+        attachments_fun = [{
+            "color": "#4cd992",
+            "blocks": [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Fun Commands:*"
+                    },
+                    "fields": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "*space*\nAdd a Space In Between Characters\n`{}space <phrase>`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*msgstatus*\nEnable/Disable Random Emoji in Status on Msgs\n`{}msgstatus`".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*subspace*\nSubstitute Every Space with an Emoji\n`{}subspace <emoji>`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*shift*\nGeNeRaTe ShIfT tExT\n`{}shift <phrase>`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*xkcd*\nGet The Daily xkcd Comic\n`{}xkcd`\n".format(config['prefix'])
+                        }
+                    ]
+                }
+            ]
+        }]
+        attachments_info = [{
+            "color": "#0f874a",
+            "blocks": [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Info Commands:*"
+                    },
+                    "fields": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "*help*\nDisplay Help Menu\n`{}help`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*info*\nDisplay Info About Bot\n`{}info`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*convinfo*\nGet Info About Chat/Channel\n`{}convinfo [#channel]`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*uinfo*\nGet Info About User\n`{}uinfo @user`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*winfo*\nGet Info About Workspace\n`{}winfo`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*stats*\nGet Stats About Bot\n`{}stats`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*listener list*\nList All Listeners\n`{}listener list`\n".format(config['prefix'])
+                        }
+                    ]
+                },
+            ]
+        }]
+        if len(text_split) < 2:
+            try:
+                web_client.chat_update(
+                    channel=channel_id,
+                    ts=timestamp,
+                    text='',
+                    attachments=attachments
+                )
+            except SlackApiError as e:
+                bot.error(e)
+        else:
+            if text_split[1] == 'general':
+                try:
+                    web_client.chat_update(
+                        channel=channel_id,
+                        ts=timestamp,
+                        text='',
+                        attachments=attachments_general
+                    )
+                except SlackApiError as e:
+                    bot.error(e)
+            elif text_split[1] == 'fun':
+                try:
+                    web_client.chat_update(
+                        channel=channel_id,
+                        ts=timestamp,
+                        text='',
+                        attachments=attachments_fun
+                    )
+                except SlackApiError as e:
+                    bot.error(e)
+            elif text_split[1] == 'crs':
+                try:
+                    web_client.chat_update(
+                        channel=channel_id,
+                        ts=timestamp,
+                        text='',
+                        attachments=attachments_crs
+                    )
+                except SlackApiError as e:
+                    bot.error(e)
+            elif text_split[1] == 'info':
+                try:
+                    web_client.chat_update(
+                        channel=channel_id,
+                        ts=timestamp,
+                        text='',
+                        attachments=attachments_info
+                    )
+                except SlackApiError as e:
+                    bot.error(e)
 
 def reactrand(**payload):
     data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('reactrand', **payload)

@@ -8,7 +8,8 @@ import re
 print(Prefixes.event + 'Loading Plugins')
 
 commands = {
-        'heartbeat': lambda **payload: heartbeat(),
+        'heartbeat': lambda **payload: heartbeat,
+        'ping': lambda **payload: ping,
         'stats' : lambda **payload: stats,
         'setprefix': lambda **payload: setprefix,
         'space' : lambda **payload: space,
@@ -68,6 +69,7 @@ print(Prefixes.event + 'Custom Plugins Loaded (If Any)')
 try:
     print(Prefixes.event + 'Running Bot...')
     print(Prefixes.start + 'Log Output:')
+    rtmclient.ping_interval = 2
     run_client(rtmclient)
 except KeyboardInterrupt:
     print(Prefixes.event + 'Shutdown Called')

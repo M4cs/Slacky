@@ -1,3 +1,7 @@
+### Update 1.5.2:
+
+  - Fixes `heartbeat` command and adds `ping` command
+
 ### Update 1.5.1:
 
   - Merges @TotallyChase's PR
