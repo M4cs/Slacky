@@ -1,3 +1,7 @@
+### Update 1.5.3:
+
+  - New format for `ping` and `stats` command
+
 ### Update 1.5.2:
 
   - Fixes `heartbeat` command and adds `ping` command

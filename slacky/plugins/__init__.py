@@ -45,7 +45,21 @@ def ping(**payload):
             web_client.chat_update(
                 channel=channel_id,
                 ts=timestamp,
-                text='`Pong! Took: {}ms`'.format(relay)
+                text='',
+                attachments=[
+                    {
+                        "color": "#f8f33a",
+                        "blocks": [
+                            {
+                                "type": "section",
+                                "text": {
+                                    "type": "mrkdwn",
+                                    "text": ":signal_strength: *Response Time:* {}ms".format(relay)
+                                }
+                            }
+                        ]
+                    }
+                ]
             )
         except SlackApiError as e:
             bot.error(e)
@@ -408,7 +422,7 @@ def stats(**payload):
                     },
                     {
                         "type": "mrkdwn",
-                        "text": "*Ping:* {}".format(relay)
+                        "text": ":signal_strength: *Rsponse Time:* {}".format(relay)
                     }
                 ]
             }
