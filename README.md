@@ -10,9 +10,9 @@ The First Python Selfbot for Slack Workspaces :star:
 
 ## What is this?
 
-Slacky was created as way to automate and make Slack more fun to use. It comes with many commands by default and even allows for custom plugins to be built and imported easily.
+Slacky is a self-bot for Slack. What is a selfbot? Unlike a normal Slack Bot, Slacky makes all it's request using your personal user token so that it can act as you. Therefore it will edit and post as you rather than a third-party bot making it look like you are doing things extremely fast like custom replies, animations, and more! 
 
-Slack as far as I can see have no rules against using selfbots so the only people who would probably find this annoying/against policy would be your organizer admistrators.
+There are a ton of default commands, and easily loadable custom plugins. You are even able to run it in multiple workspaces at once. Read more below for info on the wiki and more commands.
 
 Discord for Support: https://discord.gg/JjZwJVF
 
@@ -38,6 +38,7 @@ Assumes prefix is `~`
 | Command   | Description                            | Usage                         |
 | :--: | :--: | :--: |
 | heartbeat | Check if bot is up or not              | ~heartbeat                    |
+| ping      | Get response time from server hosting bot | ~ping                      |
 | uinfo     | Get info about a user                  | ~uinfo @user                  |
 | winfo     | Get info about the current workspace   | ~winfo                        |
 | convinfo  | Get info about conversation/channel    | ~convinfo #chantag|optional   |
