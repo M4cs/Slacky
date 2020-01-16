@@ -422,7 +422,7 @@ def stats(**payload):
                     },
                     {
                         "type": "mrkdwn",
-                        "text": ":signal_strength: *Rsponse Time:* {}".format(relay)
+                        "text": ":signal_strength: *Response Time:* {}".format(relay)
                     }
                 ]
             }
