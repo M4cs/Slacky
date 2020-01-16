@@ -870,6 +870,10 @@ def shelp(**payload):
                         },
                         {
                             "type": "mrkdwn",
+                            "text": "*ping*\nGet Response Time of Bot\n`{}ping`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
                             "text": "*listener list*\nList All Listeners\n`{}listener list`\n".format(config['prefix'])
                         }
                     ]
