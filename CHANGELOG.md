@@ -1,3 +1,7 @@
+### Update 1.5.4:
+
+  - Fix `help` with `ping` command
+
 ### Update 1.5.3:
 
   - New format for `ping` and `stats` command
