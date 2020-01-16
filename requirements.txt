@@ -6,4 +6,3 @@ httpx
 slackclient
 nest_asyncio
 pillow
-python-opencv
