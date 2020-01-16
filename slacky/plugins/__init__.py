@@ -38,7 +38,7 @@ def cmd_setup(command, **payload):
 def ping(**payload):
     data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('ping', **payload)
     if data:
-        real_ts = float(float(timestamp) - 3)
+        real_ts = float(timestamp)
         now = float(time.time())
         relay = int(float(now - real_ts) * 1000)
         try:
@@ -382,7 +382,7 @@ def stats(**payload):
     data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('stats', **payload)
     if data:
         workspace = client.team_info()['team']['name']
-        real_ts = float(float(timestamp) - 3)
+        real_ts = float(timestamp)
         now = float(time.time())
         relay = int(float(now - real_ts) * 1000)
         blocks = [

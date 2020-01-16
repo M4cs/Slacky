@@ -1,3 +1,7 @@
+### Update 1.5.5:
+
+  - Fix `ping` command
+
 ### Update 1.5.4:
 
   - Fix `help` with `ping` command
