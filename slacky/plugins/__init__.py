@@ -829,6 +829,10 @@ def shelp(**payload):
                         {
                             "type": "mrkdwn",
                             "text": "*xkcd*\nGet The Daily xkcd Comic\n`{}xkcd`\n".format(config['prefix'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*deepfry*\nDeepfry User Image or Image from URL\n`{}deepfry`\n*CUSTOM PLUGIN, MUST LOAD MANUALLY*".format(config['prefix'])
                         }
                     ]
                 }

@@ -33,7 +33,9 @@ commands = {
         'shift' : lambda **payload: shift,
         'status': lambda **payload: status,
         'listener': lambda **payload: listenercmd,
-        'msgstatus': lambda  **payload: msgstatus
+        'msgstatus': lambda  **payload: msgstatus,
+        # Uncomment to load deepfry, requires OpenCV 4
+        # 'deepfry': lambda  **payload: deepfry
     }
 
 @slack.RTMClient.run_on(event='message')
@@ -74,9 +76,9 @@ try:
 except KeyboardInterrupt:
     print(Prefixes.event + 'Shutdown Called')
     exit(0)
-# except Exception as e:
-#     bot.error(e)
-#     bot.error_count += 1
-#     print(Prefixes.event + 'Attempting To Auto Reconnect...')
-#     time.sleep(2)
-#     run_client(rtmclient)
+except Exception as e:
+    bot.error(e)
+    bot.error_count += 1
+    print(Prefixes.event + 'Attempting To Auto Reconnect...')
+    time.sleep(2)
+    run_client(rtmclient)
