@@ -8,7 +8,7 @@ ADD requirements.txt /usr/src/app/requirements.txt
 
 RUN pip install -r requirements.txt
 
-RUN apt-get install python-opencv
+RUN apt-get install libopencv-dev python3-opencv
 
 ADD . /usr/src/app
 
