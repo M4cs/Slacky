@@ -40,7 +40,7 @@ def deepfry(**payload):
             if 'http' in text_split[1]:
                 image = httpx.get(text_split[1].strip('<').strip('>')).content
                 img = Image.open(BytesIO(image))
-                img = deepfryy(img=img)
+                img = deepfryy(img=img, flares=False)
                 img.save('./tmp.jpg')
                 try:
                     web_client.chat_delete(
