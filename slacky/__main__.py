@@ -35,7 +35,9 @@ commands = {
         'listener': lambda **payload: listenercmd,
         'msgstatus': lambda  **payload: msgstatus,
         # Uncomment to load deepfry, requires OpenCV 4
-        # 'deepfry': lambda  **payload: deepfry
+        # 'deepfry': lambda  **payload: deepfry,
+        # Uncomment to load shutterstock, requires API credentials,
+        'stockpic': lambda **payload: stockpic
     }
 
 @slack.RTMClient.run_on(event='message')

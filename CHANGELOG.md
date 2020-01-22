@@ -1,3 +1,8 @@
+### Update 1.7:
+
+  - Adds `stockpic` command.
+  - Requires Shutterstock Credentials
+
 ### Update 1.6:
 
   - Adds `deepfry` command from forked [deeppyer](https://github.com/Ovyerus/deeppyer)

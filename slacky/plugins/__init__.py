@@ -1,6 +1,5 @@
 from slacky import config, client, Prefixes, listener, check_user, customrs, bot, version
 from slacky.constants.emojis import emojis
-from slacky.plugins.custom import *
 from slack.errors import SlackApiError
 from terminaltables import DoubleTable
 from howdoi import howdoi
@@ -34,6 +33,8 @@ def cmd_setup(command, **payload):
             return None, None, None, None, None, None, None
     else:
         return None, None, None, None, None, None, None
+    
+from slacky.plugins.custom import *
     
 def ping(**payload):
     data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('ping', **payload)
