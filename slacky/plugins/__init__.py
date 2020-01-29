@@ -5,6 +5,9 @@ from terminaltables import DoubleTable
 from howdoi import howdoi
 from threading import Thread
 from pyfiglet import Figlet
+from io import BytesIO
+import requests
+import pandas as pd
 import json
 import slack
 import httpx
@@ -35,6 +38,95 @@ def cmd_setup(command, **payload):
         return None, None, None, None, None, None, None
     
 from slacky.plugins.custom import *
+
+def coronavirus(**payload):
+    data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('coronastatus', **payload)
+    if data:
+        try:
+            web_client.chat_update(
+                channel=channel_id,
+                ts=timestamp,
+                text="One Second"
+            )
+        except SlackApiError as e:
+            bot.error(e)
+        csv_content = requests.get('https://docs.google.com/spreadsheets/d/1yZv9w9zRKwrGTaR-YzmAqMefw4wMlaXocejdxZaTs6w/export?usp=sharing&format=csv').content
+        df = pd.read_csv(BytesIO(csv_content), index_col=0)
+        places = df['Country/Region']
+        confirmed = df['Confirmed']
+        deaths = df['Deaths']
+        recovered = df['Recovered']
+        total_confirm = confirmed.sum()
+        total_deaths = deaths.sum()
+        total_recov = recovered.sum()
+        region_dict = {}
+        for place, confirm, death in zip(places, confirmed, deaths):
+            if region_dict.get(place):
+                region_dict[place]['confirms'] = int(region_dict[place].get('confirms')) + int(confirm) if str(confirm).lower() != 'nan' else 0
+                region_dict[place]['deaths'] = int(region_dict[place].get('deaths')) + int(death) if str(death).lower() != 'nan' else 0
+            else:
+                region_dict[place] = {
+                    'confirms': int(confirm) if str(confirm).lower() != 'nan' else 0,
+                    'deaths': int(death) if str(death).lower() != 'nan' else 0,
+                }
+        blocks = [
+            {
+                'type': 'section',
+                'text': {
+                    'type': 'mrkdwn',
+                    'text': '*Status of Coronavirus:*'
+                }
+            },
+            {
+                'type': 'section',
+                'fields': [
+                    {
+                        'type': 'mrkdwn',
+                        'text': ':mask: *Confirmed Cases: {}*'.format(int(total_confirm))
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': ':skull: *Deaths: {}*'.format(int(total_deaths))
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': ':muscle: *Recovered: {}*'.format(int(total_recov))
+                    }
+                ]
+            }
+        ]
+        blocks.append({"type": "section", "fields": []})
+        count = 0
+        for k, v in region_dict.items():
+            if count == 10:
+                break
+            blocks[2]['fields'].append({
+                "type": "mrkdwn",
+                "text": "*Region:* {}\n*Confirmed:* {}\n*Deaths:* {}\n==================\n".format(k, region_dict[k]['confirms'], region_dict[k]['deaths'])
+            })
+            count += 1
+        blocks.append({"type": "section", "fields": []})
+        new_count = 0
+        for k, v in region_dict.items():
+            if new_count >= count:
+                blocks[3]['fields'].append({
+                    "type": "mrkdwn",
+                    "text": "*Region:* {}\n*Confirmed:* {}\n*Deaths:* {}\n=================\n".format(k, region_dict[k]['confirms'], region_dict[k]['deaths'])
+                })
+            new_count += 1
+
+        print(blocks)
+        try:
+            web_client.chat_update(
+                channel=channel_id,
+                ts=timestamp,
+                attachments=[{
+                    'color': '#f43d2d',
+                    'blocks': blocks
+                }]
+            )
+        except SlackApiError as e:
+            bot.error(e)
     
 def ping(**payload):
     data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('ping', **payload)

@@ -1,3 +1,7 @@
+### Update 1.8:
+
+  - Adds `coronastatus` command to check Wuhan Coronavirus Status
+
 ### Update 1.7:
 
   - Adds `stockpic` command.
