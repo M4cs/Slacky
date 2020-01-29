@@ -115,7 +115,6 @@ def coronavirus(**payload):
                 })
             new_count += 1
 
-        print(blocks)
         try:
             web_client.chat_update(
                 channel=channel_id,
