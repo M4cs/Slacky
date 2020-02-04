@@ -1,3 +1,7 @@
+### Update 1.8.3:
+
+  - Adds update check in bot and `stats` command.
+
 ### Update 1.8.2:
 
   - Fix `setstatus` command from being `status` command

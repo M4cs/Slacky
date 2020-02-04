@@ -26,6 +26,7 @@ class BotMetaData:
         self.message_count = 0
         self.errors = []
         self.msgstatus = False
+        self.needs_update = False
         
     def error(self, e):
         print(Prefixes.error + str(e))
@@ -135,6 +136,7 @@ try:
 
     if version != rv:
         print(Prefixes.warning + 'Newer Version Available! Please re-pull to update.')
+        bot.needs_update = True
     else:
         print(Prefixes.info + 'Up to Date!')
     config = lc(config_path)

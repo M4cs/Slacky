@@ -477,6 +477,10 @@ def stats(**payload):
         real_ts = float(timestamp)
         now = float(time.time())
         relay = int(float(now - real_ts) * 1000)
+        if bot.needs_update:
+            version_text = str(version) + " (Update Available)"
+        else:
+            version_text = str(version)
         blocks = [
             {
                 "type": "section",
@@ -515,6 +519,10 @@ def stats(**payload):
                     {
                         "type": "mrkdwn",
                         "text": ":signal_strength: *Response Time:* {}ms".format(relay)
+                    },
+                    {
+                        "type": "mrkdwn",
+                        "text": "*Version*: {}".format(version_text)
                     }
                 ]
             }
