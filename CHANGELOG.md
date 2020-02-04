@@ -1,3 +1,7 @@
+### Update 1.8.2:
+
+  - Fix `setstatus` command from being `status` command
+
 ### Update 1.8.1:
 
   - Fix requirements to include `pandas`

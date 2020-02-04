@@ -712,7 +712,7 @@ def ascii(**payload):
                 
 
 def status(**payload):
-    data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('status', **payload)
+    data, channel_id, user, timestamp, web_client, text, text_split = cmd_setup('setstatus', **payload)
     if data:
         if len(text_split) < 3:
             print(Prefixes.warning + 'Missing Arguments! Read Help For Information')
