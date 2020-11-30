@@ -133,7 +133,7 @@ try:
 
     remote_v = httpx.get('https://raw.githubusercontent.com/M4cs/Slacky/master/version.txt')
     rv = remote_v.content.decode('utf-8')
-
+    bot = BotMetaData()
     if version != rv:
         print(Prefixes.warning + 'Newer Version Available! Please re-pull to update.')
         bot.needs_update = True
@@ -142,7 +142,7 @@ try:
     config = lc(config_path)
     if not config:
         print(Prefixes.warning + 'No Config File Found. Starting Wizard.')
-        print(Prefixes.start + 'Enter Legacy Workspace Token DO NOT SHARE THIS WITH ANYBODY')
+        print(Prefixes.start + 'Go to https://slackyauth.maxbridgland.com/authorize and Grab a Token for Slacky 2.0')
         token = input('> ')
         print(Prefixes.start + 'Enter User ID. Google How To Get This.')
         user_id = input('> ')
@@ -180,7 +180,6 @@ try:
     user = client.users_info(user=config['user'])
     team = client.team_info()['team']['domain']
     print(Prefixes.info + 'Logged in as {}@{}'.format(user['user']['name'], team))
-    bot = BotMetaData()
 except KeyboardInterrupt:
     print(Prefixes.event + 'Shutdown Called')
     exit(0)
